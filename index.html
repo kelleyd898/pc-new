@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintSync AI — Automated Device Diagnostic & Configuration Framework</title>
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --card-bg: #131a2c;
+            --accent-blue: #38bdf8;
+            --accent-purple: #818cf8;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #1e293b;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+        header {
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+        main {
+            flex: 1;
+        }
+        .page-view {
+            display: none;
+        }
+        .page-view.active {
+            display: block;
+        }
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+            position: relative;
+        }
+        .badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: var(--accent-blue);
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #ffffff 60%, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 40px;
+        }
+        .dashboard-mock {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: left;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            margin-bottom: 40px;
+        }
+        .db-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .grid-docs {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media(min-width: 768px) {
+            .grid-docs { grid-template-columns: repeat(2, 1fr); }
+        }
+        .doc-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .step-tag {
+            font-size: 0.75rem;
+            background: #1e293b;
+            padding: 3px 8px;
+            border-radius: 4px;
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+        /* Legal & Contact Subpages Styling */
+        .legal-container {
+            padding: 60px 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .legal-container h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: white;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .legal-container h3 {
+            font-size: 1.25rem;
+            margin: 25px 0 10px 0;
+            color: var(--accent-blue);
+        }
+        .legal-container p {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        /* Contact Form Object */
+        .contact-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+        }
+        .submit-btn {
+            background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        footer {
+            background-color: #070a12;
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+        .footer-nav {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        .footer-nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        .footer-nav a:hover {
+            color: var(--accent-blue);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container nav">
+        <a class="logo" onclick="showPage('home')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            PrintSync AI
+        </a>
+        <ul class="nav-links">
+            <li><a onclick="showPage('home')" style="cursor:pointer;">Architecture</a></li>
+            <li><a onclick="showPage('contact')" style="cursor:pointer;">Contact Desk</a></li>
+        </ul>
+    </div>
+</header>
+
+<main class="container">
+    
+    <!-- 1. HOME VIEW -->
+    <div id="home" class="page-view active">
+        <section class="hero">
+            <span class="badge">Next-Gen Peripheral Diagnostic Index</span>
+            <h1>Automated Architecture & Wireless Diagnostics</h1>
+            <p>An open-source informational index designed to map local perimeter networks, establish interface connections, and isolate peripheral configuration errors using logical step-by-step algorithms.</p>
+            
+            <div class="dashboard-mock">
+                <div class="db-header">
+                    <div style="font-size: 0.95rem; text-transform: uppercase; color: var(--text-muted);"><span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981; margin-right: 5px;"></span> System Diagnostics Index & Mapping Logic</div>
+                    <div style="color: var(--accent-blue); font-size: 0.85rem; font-family: monospace;">v2.0.26-Stable</div>
+                </div>
+                
+                <div class="grid-docs">
+                    <div class="doc-card">
+                        <span class="step-tag">MODULE 01</span>
+                        <h3 style="margin: 10px 0;">Subnet Signal Allocation</h3>
+                        <p style="font-size:0.9rem; color: var(--text-muted);">To register a physical communication link between your network station and a wireless output peripheral, configure your local access panel interface using structured discovery routines.</p>
+                    </div>
+                    <div class="doc-card">
+                        <span class="step-tag">MODULE 02</span>
+                        <h3 style="margin: 10px 0;">Standard Firmware Synchronization</h3>
+                        <p style="font-size:0.9rem; color: var(--text-muted);">Initialize native OS peripheral detection arrays via administrative settings. Select 'Add Network Infrastructure Device' to seamlessly register local hardware addresses.</p>
+                    </div>
+                    <div class="doc-card">
+                        <span class="step-tag">MODULE 03</span>
+                        <h3 style="margin: 10px 0;">Spooler Architecture Clearance</h3>
+                        <p style="font-size:0.9rem; color: var(--text-muted);">If communication arrays register an "Offline" sequence, verify state logs within the administrative utility sub-panel. Re-route physical requests to purge corrupt local buffer files.</p>
+                    </div>
+                    <div class="doc-card">
+                        <span class="step-tag">MODULE 04</span>
+                        <h3 style="margin: 10px 0;">Interface Topology Checks</h3>
+                        <p style="font-size:0.9rem; color: var(--text-muted);">Check spatial interference boundaries between transmission relays. A cycle reboot of the main routing system flushes volatile runtime parameters automatically.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 2. DISCLAIMER VIEW -->
+    <div id="disclaimer" class="page-view legal-container">
+        <h2>Brand Exclusion & Disclaimer Notice</h2>
+        <p>This tracking index operates exclusively as an independent informational data repository. The technical guidelines, processing diagrams, and baseline execution steps rendered across this ecosystem are curated strictly for programmatic evaluation, network mapping analysis, and autonomous system health tracking.</p>
+        <h3>No System Affiliation</h3>
+        <p>We declare zero structural connection, formal partnership, operational certification, or commercial alignment with any consumer hardware manufacturing organizations, multi-national brand enterprises, or computer peripheral distributors. Any distinct brand names, operational marks, or registered corporate models visible within this structural reference layer remain the absolute legal assets of their corresponding proprietary registrants.</p>
+    </div>
+
+    <!-- 3. PRIVACY VIEW -->
+    <div id="privacy" class="page-view legal-container">
+        <h2>Privacy Protection Framework</h2>
+        <p>Your peripheral security data integrity is fundamental to this documentation node. This framework specifies the localized mechanics governing computational transparency inside this specific informational environment.</p>
+        <h3>Telemetry Processing</h3>
+        <p>This resource index executes strictly as a static infrastructure layer. We maintain zero systemic pipelines for extracting, collecting, archiving, parsing, or sharing private user identities, localized IP logs, system configurations, or session cookies. No monitoring apparatus or analytic trackers are integrated within this repository.</p>
+    </div>
+
+    <!-- 4. TERMS VIEW -->
+    <div id="terms" class="page-view legal-container">
+        <h2>Terms of Reference Consumption</h2>
+        <p>By executing system reference checks or reviewing the diagnostic modules published within this portal, you enter an absolute agreement to conform to the explicit usage limits outlined in this charter.</p>
+        <h3>Reference Use Directives</h3>
+        <p>All systemic data vectors, documentation procedures, and localized signal diagnostic layouts are optimized purely for self-help academic applications. Users apply these architectural manuals at their individual engineering discretion. No operational liability, performance guarantees, or network certifications are provided by this node.</p>
+    </div>
+
+    <!-- 5. CONTACT VIEW -->
+    <div id="contact" class="page-view legal-container">
+        <h2>Technical Documentation Desk</h2>
+        <p>Have questions regarding our architectural manuals or structural open-source reference guides? Get in touch with our web portal administration.</p>
+        <div class="contact-card">
+            <div class="form-group">
+                <label>Corporate Name / Handle</label>
+                <input type="text" placeholder="Enter identity label...">
+            </div>
+            <div class="form-group">
+                <label>Communication Email</label>
+                <input type="email" placeholder="name@domain.com">
+            </div>
+            <div class="form-group">
+                <label>Query Scope Documentation</label>
+                <textarea rows="4" placeholder="Detail your documentation query..."></textarea>
+            </div>
+            <button class="submit-btn" onclick="alert('Inquiry logged into standard database.')">Dispatch Request</button>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-nav">
+            <a onclick="showPage('home')">System Architecture</a>
+            <a onclick="showPage('disclaimer')">Disclaimer Notice</a>
+            <a onclick="showPage('privacy')">Privacy Framework</a>
+            <a onclick="showPage('terms')">Terms of Service</a>
+            <a onclick="showPage('contact')">Contact Desk</a>
+        </div>
+        <p>&copy; 2026 PrintSync AI Infrastructure Core. Globally Published for Open Peripheral Documentation. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script>
+    function showPage(pageId) {
+        // Hide all active views
+        const views = document.querySelectorAll('.page-view');
+        views.forEach(view => view.classList.remove('active'));
+        
+        // Show target view
+        const targetView = document.getElementById(pageId);
+        if(targetView) {
+            targetView.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+</script>
+
+</body>
+</html>
