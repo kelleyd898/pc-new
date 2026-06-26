@@ -11,8 +11,8 @@
 
   <title>Printer Setup Installation Hub</title>
   
-  <!-- Lucide Vector Icons Engine -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Optimized Fast & Non-blocking Lucide Vector Icons Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js" defer></script>
 
   <style>
     /* ─── RESET & UNIVERSAL LAYOUT STYLES ───────────────────────────────────── */
@@ -339,7 +339,7 @@
     .analysis-col p { font-size: 0.95rem; color: #4b5563; line-height: 1.65; text-align: justify; }
 
     /* ─── FOOTER METADATA STRUCT ────────────────────────────────────────────── */
-footer {
+    footer {
       background-color: #111827;
       color: #9ca3af;
       padding: 2.5rem 1.5rem;
@@ -367,6 +367,7 @@ footer {
       text-align: justify;
       font-weight: 500;
     }
+    
     .brand-logo {
       max-width: 100%;
       max-height: 55px; /* Ensures safe uniform height inside the 120px card bounds */
@@ -378,8 +379,6 @@ footer {
   </style>
 </head>
 <body>
-
-
 
   <!-- ─── HERO MAIN TITLE BLOCK ─── -->
   <div class="section-hero-title">
@@ -478,7 +477,7 @@ footer {
     </div>
   </section>
 
-  <!-- ─── MORE CONFIGURATION OPTIONS (CLICK ACTIONS REMOVED) ─── -->
+  <!-- ─── MORE CONFIGURATION OPTIONS ─── -->
   <section class="utilities-section">
     <div class="max-w-6xl">
       <h3 class="utilities-main-title font-sans">More configuration options for this topic</h3>
@@ -527,7 +526,7 @@ footer {
     </div>
   </section>
 
-<footer>
+  <footer>
     <div class="max-w-7xl footer-wrapper font-sans">
       <div class="footer-left">
         <p class="footer-copyright">Printer Setup Hub | All Rights Reserved</p>
@@ -537,7 +536,6 @@ footer {
       </div>
     </div>
   </footer>
-
 
 <script>
 function navigateToBrand(code) {
@@ -550,7 +548,6 @@ function triggerLiveChatFallback() {
 
 // Telegram Form Submit
 async function handlePortalFormSubmit(event) {
-
     event.preventDefault();
 
     const targetModel = document.getElementById('mainModelInput').value.trim();
@@ -566,7 +563,6 @@ async function handlePortalFormSubmit(event) {
 `.trim();
 
     try {
-
         const response = await fetch("/api/telegram", {
             method: "POST",
             headers: {
@@ -582,20 +578,20 @@ async function handlePortalFormSubmit(event) {
         } else {
             alert("Failed to submit request.");
         }
-
     } catch (err) {
         console.error(err);
         alert("Network Error");
     }
-
 }
 
-window.onload = function () {
+// Render vector icons as soon as DOM is constructed (Faster execution)
+document.addEventListener("DOMContentLoaded", function () {
     if (typeof lucide !== "undefined") {
         lucide.createIcons();
     }
-};
+});
 </script>
+
 <!-- Start of LiveChat (www.livechat.com) code -->
 <script>
     window.__lc = window.__lc || {};

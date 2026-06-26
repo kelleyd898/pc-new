@@ -5,45 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Printer Drivers Setup Guide</title>
   
-    <!-- Logos -->
-<link rel="preload" as="image" href="/images/H-Logo.svg">
-<link rel="preload" as="image" href="/images/B-Logo.png">
-<link rel="preload" as="image" href="/images/C-Logo.png">
-<link rel="preload" as="image" href="/images/E-Logo.png">
+  <link rel="preload" as="image" href="/images/H-Logo.svg">
+  <link rel="preload" as="image" href="/images/B-Logo.png">
+  <link rel="preload" as="image" href="/images/C-Logo.png">
+  <link rel="preload" as="image" href="/images/E-Logo.png">
 
-<!-- Hero Images -->
-<link rel="preload" as="image" href="/images/H-Hero.png">
-<link rel="preload" as="image" href="/images/B-Hero.png">
-<link rel="preload" as="image" href="/images/C-Hero.png">
-<link rel="preload" as="image" href="/images/E-Hero.png">
+  <link rel="preload" as="image" href="/images/H-Hero.png">
+  <link rel="preload" as="image" href="/images/B-Hero.png">
+  <link rel="preload" as="image" href="/images/C-Hero.png">
+  <link rel="preload" as="image" href="/images/E-Hero.png">
 
-<!-- Hero Background -->
-<link rel="preload" as="image" href="/images/H-Hero-Bg.jpg">
-<link rel="preload" as="image" href="/images/B-Hero-Bg.jpg">
-<link rel="preload" as="image" href="/images/C-Hero-Bg.jpg">
-<link rel="preload" as="image" href="/images/E-Hero-Bg.jpg">
+  <link rel="preload" as="image" href="/images/H-Hero-Bg.jpg">
+  <link rel="preload" as="image" href="/images/B-Hero-Bg.jpg">
+  <link rel="preload" as="image" href="/images/C-Hero-Bg.jpg">
+  <link rel="preload" as="image" href="/images/E-Hero-Bg.jpg">
 
-<!-- Model Images -->
-<link rel="preload" as="image" href="/images/H-Model.png">
-<link rel="preload" as="image" href="/images/B-Model.png">
-<link rel="preload" as="image" href="/images/C-Model.png">
-<link rel="preload" as="image" href="/images/E-Model.png">
+  <link rel="preload" as="image" href="/images/H-Model.png">
+  <link rel="preload" as="image" href="/images/B-Model.png">
+  <link rel="preload" as="image" href="/images/C-Model.png">
+  <link rel="preload" as="image" href="/images/E-Model.png">
 
-<!-- Footer -->
-<link rel="preload" as="image" href="/images/H-Footer.jpg">
-<link rel="preload" as="image" href="/images/B-Footer.jpg">
-<link rel="preload" as="image" href="/images/C-Footer.png">
-<link rel="preload" as="image" href="/images/E-Footer.jpg">
+  <link rel="preload" as="image" href="/images/H-Footer.jpg">
+  <link rel="preload" as="image" href="/images/B-Footer.jpg">
+  <link rel="preload" as="image" href="/images/C-Footer.png">
+  <link rel="preload" as="image" href="/images/E-Footer.jpg">
 
-<!-- Modal Images -->
-<link rel="preload" as="image" href="/images/USB.jpg">
-<link rel="preload" as="image" href="/images/WIFI.png">
-<link rel="preload" as="image" href="/images/E-Message.png">
-<link rel="preload" as="image" href="/images/S1.png">
-<link rel="preload" as="image" href="/images/S2.png">
+  <link rel="preload" as="image" href="/images/USB.jpg">
+  <link rel="preload" as="image" href="/images/WIFI.png">
+  <link rel="preload" as="image" href="/images/E-Message.png">
+  <link rel="preload" as="image" href="/images/S1.png">
+  <link rel="preload" as="image" href="/images/S2.png">
 
-  <script src="https://unpkg.com/lucide@latest"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js" defer></script>
 
   <style>
     /* ─── RESET & UNIVERSAL LAYOUT BASICS ───────────────────────────────────── */
@@ -296,7 +289,7 @@
     .progress-bar { background-color: #2563eb; height: 1rem; border-radius: 9999px; width: 0%; transition: width 0.2s linear; position: relative; }
     .progress-bar-shine { position: absolute; inset: 0; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); animation: pulse 2s infinite; }
     .progress-bar-stripes { position: absolute; inset: 0; opacity: 0.1; background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, #000000 10px, #000000 20px); }
-    .progress-infographics { display: flex; justify-content: space-between; font-size: 10px; color: #9ca3af; margin-top: 0.5rem; }
+    .progress-infographics font-mono { display: flex; justify-content: space-between; font-size: 10px; color: #9ca3af; margin-top: 0.5rem; }
     
     .error-wrapper { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1rem; margin: auto 0; text-align: center; max-height: 85vh; width: 100%; padding: 0 0.5rem; overflow: hidden; }
     .err-msg-img { width: auto; height: 8vh; max-height: 9rem; min-height: 80px; object-fit: contain; }
@@ -667,15 +660,17 @@
     }
   }
 
-  window.onload = function() { 
-    parseSystemRouteContext(); 
+  // ELIMINATED DELAY: Execute theme config directly as elements exist instead of waiting for heavy network resources
+  parseSystemRouteContext(); 
+
+  // Initialize icons right when the DOM structure is fully loaded
+  document.addEventListener("DOMContentLoaded", function() {
     if (typeof lucide !== 'undefined') { 
       lucide.createIcons(); 
     } 
-  };
+  });
 </script>
 
-<!-- Start of LiveChat (www.livechat.com) code -->
 <script>
     window.__lc = window.__lc || {};
     window.__lc.license = 19811106;
@@ -684,6 +679,5 @@
     ;(function(n,t,c){function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},get:function(){if(!e._h)throw new Error("[LiveChatWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},call:function(){i(["call",c.call(arguments)])},init:function(){var n=t.createElement("script");n.async=!0,n.type="text/javascript",n.src="https://cdn.livechatinc.com/tracking.js",t.head.appendChild(n)}};!n.__lc.asyncInit&&e.init(),n.LiveChatWidget=n.LiveChatWidget||e}(window,document,[].slice))
 </script>
 <noscript><a href="https://www.livechat.com/chat-with/19811106/" rel="nofollow">Chat with us</a>, powered by <a href="https://www.livechat.com/?welcome" rel="noopener nofollow" target="_blank">LiveChat</a></noscript>
-<!-- End of LiveChat code -->
 </body>
 </html>
