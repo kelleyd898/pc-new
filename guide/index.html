@@ -1,918 +1,594 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PrintSync Wiki — Open Peripheral Diagnostics & Device Architecture Archive</title>
-    <style>
-        :root {
-            --bg-main: #f8fafc;
-            --bg-canvas: #ffffff;
-            --card-bg: #ffffff;
-            --card-hover: #f1f5f9;
-            --accent-blue: #1d4ed8;
-            --accent-purple: #6d28d9;
-            --text-main: #0f172a;
-            --text-body: #334155;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --code-bg: #f1f5f9;
-            --table-header: #f8fafc;
-            --banner-bg: #f1f5f9;
-        }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-body);
-            line-height: 1.8;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .policy-banner {
-            background-color: var(--banner-bg);
-            color: var(--text-muted);
-            text-align: center;
-            padding: 14px 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            border-bottom: 1px solid var(--border-color);
-            letter-spacing: 0.5px;
-        }
-        .container {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 0 24px;
-            width: 100%;
-        }
-        header {
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(16px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-        }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-        }
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-        .nav-links a:hover {
-            color: var(--accent-blue);
-        }
-        main {
-            flex: 1;
-            padding-bottom: 80px;
-            background-color: var(--bg-canvas);
-        }
-        .page-view {
-            display: none;
-        }
-        .page-view.active {
-            display: block;
-        }
-        
-        /* Search Component Box */
-        .wiki-search-container {
-            background: var(--bg-main);
-            border-bottom: 1px solid var(--border-color);
-            padding: 30px 0;
-            text-align: left;
-        }
-        .search-wrapper {
-            display: flex;
-            max-width: 700px;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        .search-input {
-            flex: 1;
-            border: none;
-            padding: 14px 18px;
-            font-size: 0.95rem;
-            outline: none;
-        }
-        .search-btn {
-            background: #f1f5f9;
-            border: none;
-            border-left: 1px solid var(--border-color);
-            padding: 0 24px;
-            color: var(--text-main);
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .search-btn:hover {
-            background: #e2e8f0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Printer Setup Installation Hub</title>
+  
+  <!-- Lucide Vector Icons Engine -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-        /* Multi Column Wiki Layout */
-        .wiki-layout {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 40px;
-            margin-top: 40px;
-        }
-        @media(min-width: 992px) {
-            .wiki-layout { grid-template-columns: 280px 1fr; }
-        }
+  <style>
+    /* ─── RESET & UNIVERSAL LAYOUT STYLES ───────────────────────────────────── */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        /* Sidebar Elements */
-        .wiki-sidebar {
-            border-right: 0;
-            padding-right: 0;
-        }
-        @media(min-width: 992px) {
-            .wiki-sidebar {
-                border-right: 1px solid var(--border-color);
-                padding-right: 24px;
-            }
-        }
-        .sidebar-title {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-main);
-            margin-bottom: 18px;
-            font-weight: 700;
-            padding-left: 10px;
-        }
-        .sidebar-menu {
-            list-style: none;
-            margin-bottom: 40px;
-        }
-        .sidebar-menu li {
-            margin-bottom: 8px;
-        }
-        .sidebar-menu a {
-            color: var(--text-body);
-            text-decoration: none;
-            font-size: 0.92rem;
-            display: block;
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-        .sidebar-menu a:hover {
-            background-color: var(--bg-main);
-            color: var(--accent-blue);
-        }
-        .sidebar-menu .active-link {
-            background-color: var(--bg-main);
-            color: var(--accent-blue);
-            font-weight: 700;
-        }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #ffffff;
+      color: #374151;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        /* Breadcrumb Block */
-        .breadcrumbs {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 25px;
-            font-family: monospace;
-            background: var(--bg-main);
-            padding: 8px 14px;
-            border-radius: 6px;
-            display: inline-block;
-        }
+    .font-sans { font-family: ui-sans-serif, system-ui, sans-serif; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
 
-        .hero {
-            text-align: left;
-            padding: 10px 0 30px 0;
-        }
-        .badge {
-            background: rgba(29, 78, 216, 0.06);
-            border: 1px solid rgba(29, 78, 216, 0.15);
-            color: var(--accent-blue);
-            padding: 4px 14px;
-            border-radius: 9999px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            display: inline-block;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 20px;
-            color: var(--text-main);
-            letter-spacing: -1px;
-        }
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-bottom: 35px;
-            max-width: 950px;
-        }
-        .inline-disclaimer {
-            background: var(--bg-main);
-            border: 1px solid var(--border-color);
-            padding: 24px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            text-align: justify;
-            line-height: 1.7;
-            margin-bottom: 45px;
-        }
-        .inline-disclaimer strong {
-            color: var(--text-main);
-        }
-        .wiki-section-heading {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 50px 0 30px 0;
-            text-align: left;
-            border-left: 4px solid var(--accent-blue);
-            padding-left: 15px;
-            color: var(--text-main);
-            letter-spacing: -0.5px;
-        }
-        .grid-docs {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-        @media(min-width: 1200px) {
-            .grid-docs { grid-template-columns: repeat(2, 1fr); }
-        }
-        .doc-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 35px;
-            text-align: left;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
-        }
-        .doc-card:hover {
-            border-color: rgba(29, 78, 216, 0.3);
-            background-color: var(--card-hover);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-        }
-        .step-tag {
-            font-size: 0.72rem;
-            background: var(--bg-main);
-            padding: 3px 10px;
-            border-radius: 5px;
-            color: var(--accent-blue);
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            border: 1px solid var(--border-color);
-        }
-        .article-title {
-            font-size: 1.45rem;
-            font-weight: 700;
-            margin: 16px 0 10px 0;
-            color: var(--text-main);
-        }
-        .wiki-meta {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 18px;
-            font-family: monospace;
-        }
-        .wiki-text-block {
-            font-size: 0.98rem;
-            color: var(--text-body);
-            margin-bottom: 22px;
-            text-align: justify;
-        }
-        .instruction-list {
-            margin-left: 20px;
-            margin-bottom: 22px;
-            color: var(--text-body);
-            font-size: 0.95rem;
-        }
-        .instruction-list li {
-            margin-bottom: 12px;
-        }
-        .instruction-list strong {
-            color: var(--text-main);
-        }
-        .code-box {
-            background-color: var(--code-bg);
-            border: 1px solid var(--border-color);
-            font-family: monospace;
-            padding: 14px;
-            border-radius: 6px;
-            color: var(--accent-blue);
-            font-size: 0.88rem;
-            margin: 14px 0;
-            overflow-x: auto;
-        }
-        .tip-box {
-            background: rgba(109, 40, 217, 0.02);
-            border-left: 4px solid var(--accent-purple);
-            padding: 16px 18px;
-            border-radius: 0 8px 8px 0;
-            font-size: 0.9rem;
-            color: var(--text-body);
-            margin-top: 20px;
-            border: 1px solid var(--border-color);
-            border-left-width: 4px;
-        }
-        
-        /* Technical FAQ Styles */
-        .faq-block {
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 30px;
-        }
-        .faq-block:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-        .faq-block h4 {
-            font-size: 1.15rem;
-            color: var(--text-main);
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        .faq-block p {
-            font-size: 0.98rem;
-            color: var(--text-body);
-            text-align: justify;
-        }
+    .max-w-7xl { max-width: 80rem; margin: 0 auto; width: 100%; }
+    .max-w-6xl { max-width: 75rem; margin: 0 auto; width: 100%; }
+    .max-w-5xl { max-width: 64rem; margin: 0 auto; width: 100%; }
 
-        .table-wrapper {
-            overflow-x: auto;
-            margin: 30px 0 60px 0;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 0.92rem;
-            background-color: var(--card-bg);
-        }
-        th {
-            background-color: var(--table-header);
-            color: var(--text-main);
-            font-weight: 700;
-            padding: 16px;
-            border-bottom: 2px solid var(--border-color);
-        }
-        td {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-body);
-            vertical-align: top;
-            line-height: 1.6;
-        }
-        tr:hover {
-            background-color: var(--bg-main);
-        }
+    /* ─── NAVIGATION HEADER ─────────────────────────────────────────────────── */
+    header {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        .glossary-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            margin-top: 30px;
-        }
-        @media(min-width: 768px) {
-            .glossary-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-        .glossary-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.01);
-        }
-        .glossary-card h4 {
-            color: var(--accent-blue);
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        .glossary-card p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 4.5rem;
+      padding: 0 1.5rem;
+    }
 
-        .legal-container {
-            padding: 40px 0;
-            max-width: 1000px;
-        }
-        .legal-container h2 {
-            font-size: 2.4rem;
-            margin-bottom: 30px;
-            color: var(--text-main);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 14px;
-            letter-spacing: -0.8px;
-        }
-        .legal-container h3 {
-            font-size: 1.45rem;
-            margin: 40px 0 15px 0;
-            color: var(--accent-blue);
-            font-weight: 700;
-        }
-        .legal-container p {
-            color: var(--text-body);
-            margin-bottom: 24px;
-            text-align: justify;
-            font-size: 1rem;
-        }
-        .contact-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 45px;
-            border-radius: 14px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
-        }
-        .form-group {
-            margin-bottom: 25px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 16px;
-            background: var(--bg-main);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-main);
-            font-size: 0.95rem;
-            transition: border-color 0.2s;
-        }
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-            background-color: var(--bg-canvas);
-        }
-        .submit-btn {
-            background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
-            color: white;
-            border: none;
-            padding: 16px 32px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .submit-btn:hover {
-            opacity: 0.95;
-            transform: translateY(-1px);
-        }
-        footer {
-            background-color: var(--bg-main);
-            border-top: 1px solid var(--border-color);
-            padding: 60px 0;
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: auto;
-        }
-        .footer-nav {
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 35px;
-            flex-wrap: wrap;
-        }
-        .footer-nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.2s;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .footer-nav a:hover {
-            color: var(--accent-blue);
-        }
-    </style>
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      height: 100%;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #374151;
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      position: relative;
+      padding: 0 0.25rem;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: #0085FF;
+    }
+
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background-color: #0085FF;
+    }
+
+    /* ─── HERO ARCHITECTURE ─────────────────────────────────────────────────── */
+    .section-hero-title {
+      text-align: center;
+      padding: 3rem 1.5rem 1.5rem 1.5rem;
+      background-color: #ffffff;
+    }
+
+    .main-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: #111827;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+
+    .pill-download-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #0085FF;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 0.75rem 2.25rem;
+      border-radius: 9999px;
+      box-shadow: 0 4px 10px rgba(0, 133, 255, 0.15);
+      transition: background-color 0.15s ease;
+      border: none;
+    }
+
+    /* ─── BRAND GRID (STRICT HORIZONTAL ROW - NO WRAPPING) ──────────────────── */
+    .brand-section {
+      padding: 1rem 1.5rem 3rem 1.5rem;
+      background-color: #ffffff;
+    }
+
+    .brand-grid {
+      display: flex;
+      flex-direction: row; 
+      flex-wrap: nowrap; 
+      gap: 1.25rem;
+      width: 100%;
+    }
+
+    .brand-card {
+      flex: 1; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 0.75rem;
+      min-height: 120px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .brand-card:hover {
+      border-color: #9ca3af;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .brand-placeholder-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #9ca3af;
+    }
+
+    /* ─── GENTLE ASSISTANCE GREY BANNER (COMPLIANT ALIGNMENT) ───────────────── */
+    .grey-accent-block {
+      background-color: #e5e7eb;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      border-top: 1px solid #d1d5db;
+      border-bottom: 1px solid #d1d5db;
+    }
+
+    .grey-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+
+    .grey-subtitle {
+      font-size: 1rem;
+      color: #4b5563;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .floating-chat-container {
+      display: inline-flex;
+      align-items: center;
+      background-color: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+      gap: 2.5rem;
+    }
+
+    .chat-label-side {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .pill-chat-now-btn {
+      background-color: #0085FF;
+      color: #ffffff;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.625rem 1.5rem;
+      border-radius: 9999px;
+      cursor: pointer;
+    }
+
+    /* ─── DRIVER INLINE FORM PANEL (STRICT HORIZONTAL SINGLE LINE) ──────────── */
+    .form-section {
+      padding: 4rem 1.5rem 3rem 1.5rem;
+      background-color: #ffffff;
+    }
+
+    .form-title-wrap {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-title-main { font-size: 1.5rem; font-weight: 800; color: #111827; }
+
+    .panel-card-container {
+      background-color: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      overflow: hidden;
+    }
+
+    .panel-blue-header {
+      background-color: #0085FF;
+      color: #ffffff;
+      padding: 1rem 1.5rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .panel-body-grid-form { padding: 2rem 1.5rem; }
+
+    .form-inline-row {
+      display: flex;
+      flex-direction: row; 
+      flex-wrap: nowrap; 
+      gap: 1.25rem;
+      align-items: flex-end;
+      width: 100%;
+    }
+
+    .input-field-group { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 0.5rem; 
+      flex: 1; 
+    }
+    
+    .field-label { font-size: 0.9rem; font-weight: 700; color: #111827; }
+    
+    .field-element-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      outline: none;
+    }
+
+    .action-find-btn {
+      flex: 0.8; 
+      background-color: #0085FF;
+      color: #ffffff;
+      border: none;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      height: 46px; 
+    }
+
+    .instructional-subtext-wrap { text-align: center; margin-top: 2rem; }
+    .instruction-primary { font-size: 0.95rem; font-weight: 600; color: #4b5563; margin-bottom: 0.25rem; }
+    .instruction-secondary { font-size: 0.95rem; font-weight: 600; color: #4b5563; }
+
+    /* ─── SUPPORT OPTIONS TILES (HORIZONTAL ROW) ────────────────────────────── */
+    .utilities-section {
+      padding: 3rem 1.5rem;
+      background-color: #ffffff;
+    }
+
+    .utilities-main-title { text-align: center; font-size: 1.5rem; font-weight: 800; color: #111827; margin-bottom: 2rem; }
+    
+    .utilities-grid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    .utility-card {
+      flex: 1;
+      border-radius: 0.75rem;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .skin-blue { background-color: #0085FF; }
+    .skin-charcoal-dark { background-color: #1f2937; }
+    .skin-charcoal-light { background-color: #374151; }
+
+    /* ─── AD-SAFE INTELLECTUAL TEXT COLUMNS (SIDE-BY-SIDE GRID) ─────────────── */
+    .analysis-text-section {
+      background-color: #f3f4f6;
+      padding: 4rem 1.5rem;
+    }
+
+    .analysis-grid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 3rem;
+      width: 100%;
+    }
+
+    .analysis-col { flex: 1; }
+    .analysis-col h2 { font-size: 1.5rem; font-weight: 800; color: #111827; margin-bottom: 1rem; }
+    .analysis-col p { font-size: 0.95rem; color: #4b5563; line-height: 1.65; text-align: justify; }
+
+    /* ─── FOOTER METADATA STRUCT ────────────────────────────────────────────── */
+footer {
+      background-color: #111827;
+      color: #9ca3af;
+      padding: 2.5rem 1.5rem;
+      border-top: 1px solid #1f2937;
+    }
+
+    .footer-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .footer-copyright {
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-disclaimer {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      line-height: 1.6;
+      text-align: justify;
+      font-weight: 500;
+    }
+    .brand-logo {
+      max-width: 100%;
+      max-height: 55px; /* Ensures safe uniform height inside the 120px card bounds */
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+  </style>
 </head>
 <body>
 
-<div class="policy-banner">
-    ACADEMIC ARCHIVE NOTICE: This digital framework operates purely as an unmonetized open academic encyclopedia. Commercial fulfillment services are completely excluded.
-</div>
 
-<header>
-    <div class="container nav">
-        <a class="logo" onclick="showPage('home')">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            PrintSync Wiki
-        </a>
-        <ul class="nav-links">
-            <li><a onclick="showPage('home')" style="cursor:pointer;">Reference Core</a></li>
-            <li><a onclick="showPage('disclaimer')" style="cursor:pointer;">Exclusion Terms</a></li>
-            <li><a onclick="showPage('privacy')" style="cursor:pointer;">Privacy Rules</a></li>
-            <li><a onclick="showPage('terms')" style="cursor:pointer;">User Charter</a></li>
-            <li><a onclick="showPage('contact')" style="cursor:pointer;">Editorial Desk</a></li>
-        </ul>
+
+  <!-- ─── HERO MAIN TITLE BLOCK ─── -->
+  <div class="section-hero-title">
+    <div class="max-w-5xl">
+      <h1 class="main-title font-sans">Select Your Printer Model</h1>
+      <div class="pill-download-btn font-sans">
+        Download Your Printer Drivers
+      </div>
     </div>
-</header>
+  </div>
 
-<div class="wiki-search-container">
-    <div class="container">
-        <div class="search-wrapper">
-            <input type="text" class="search-input" placeholder="Search documentation, configuration manuals, script errors, architecture lookup...">
-            <button class="search-btn" onclick="alert('Index tracking initialized...')">Search Wiki</button>
-        </div>
-    </div>
-</div>
-
-<main class="container">
-    <div class="wiki-layout">
+  <!-- ─── BRAND GRID (FORCED SINGLE HORIZONTAL ROW LINE) ─── -->
+  <div class="brand-section">
+    <div class="max-w-5xl">
+      <div class="brand-grid">
         
-        <!-- SIDEBAR DIRECTORY NAVIGATION INDEX -->
-        <aside class="wiki-sidebar">
-            <div class="sidebar-title">Navigation Index</div>
-            <ul class="sidebar-menu">
-                <li><a onclick="showPage('home')" class="active-link" id="side-home">Main Archive Base</a></li>
-                <li><a onclick="showPage('disclaimer')" id="side-disclaimer">Exclusion Statement</a></li>
-                <li><a onclick="showPage('privacy')" id="side-privacy">Privacy Parameters</a></li>
-                <li><a onclick="showPage('terms')" id="side-terms">Reference Charter</a></li>
-                <li><a onclick="showPage('contact')" id="side-contact">Editorial Board</a></li>
-            </ul>
+        <div class="brand-card" onclick="navigateToBrand('h')">
+          <img src="/images/h-logo.png" alt="HP" class="brand-logo">
+        </div>
 
-            <div class="sidebar-title">Categories & Schema</div>
-            <ul class="sidebar-menu" style="font-size: 0.85rem; padding-left: 10px; color: var(--text-muted); line-height: 2;">
-                <li>• Network Protocols (802.11)</li>
-                <li>• OS Buffer & Queue Control</li>
-                <li>• Fluid Capillary Dynamics</li>
-                <li>• Optical Sensor Calibration</li>
-                <li>• Universal Serial Data Bus</li>
-                <li>• Duplex Architecture Logic</li>
-                <li>• Registry Schema Remediation</li>
-                <li>• Page Description Languages</li>
-            </ul>
-        </aside>
+        <div class="brand-card" onclick="navigateToBrand('br')">
+          <img src="/images/b-logo.png" alt="Brother" class="brand-logo">
+        </div>
 
-        <!-- MAIN DYNAMIC VIEWS CONTENT AREA -->
-        <div class="wiki-content-view">
-            
-            <!-- 1. HOME VIEW (DENSE KNOWLEDGE ARCHIVE) -->
-            <div id="home" class="page-view active">
-                <nav class="breadcrumbs">Archive Root / Reference Manuals / Peripheral Documentation Index</nav>
-                
-                <section class="hero">
-                    <span class="badge">Open Educational Technology Directory</span>
-                    <h1>Open Peripheral Architecture & Maintenance Index</h1>
-                    <p>An expansive, community-sourced public knowledge directory documenting advanced structural diagnostic workflows, operating system printing loops, physical data buses, and mechanical sensor configurations.</p>
-                    
-                    <div class="inline-disclaimer">
-                        <strong>Strict Non-Commercial Disclaimer:</strong> PrintSync Wiki acts entirely as an <strong>independent open-source informational ecosystem</strong>. This portal holds zero corporate alignments, financial trade deals, brand endorsements, or service processing contracts with original machine manufacturers, multi-national hardware providers, or global consumer accessories vendors. Individual product lines, technical model families, styling markers, and structural categories viewable within this library are processed purely under descriptive parameters for scholastic public clarity. All brand assets remain the proprietary properties of their respective legal entities.
-                    </div>
+        <div class="brand-card" onclick="navigateToBrand('ep')">
+          <img src="/images/E-Logo.png" alt="Epson" class="brand-logo">
+        </div>
 
-                    <h2 class="wiki-section-heading">Module 1: Wireless & Operating System Infrastructure</h2>
-                    <div class="grid-docs">
-                        <!-- ARTICLE 01 -->
-                        <div class="doc-card">
-                            <span class="step-tag">SECTION 1.1</span>
-                            <h3 class="article-title">Synchronizing Local IEEE 802.11 Wireless Data Paths</h3>
-                            <div class="wiki-meta">Module: NET-WLAN-IDX • Scope: Signal Optimization</div>
-                            <p class="wiki-text-block">Establishing a resilient localized link between standard local operating architectures and wireless data reception devices requires deep configuration alignment. When multi-band communication arrays trigger data drops, local network supervisors must systematically map topology endpoints to prevent signal collisions.</p>
-                            <ol class="instruction-list">
-                                <li><strong>Isolate Radio Frequencies:</strong> Split combined 2.4GHz/5GHz single SSIDs into distinct wireless labels to help legacy accessory chips maintain an uninterrupted lock.</li>
-                                <li><strong>Deploy Static Allocations:</strong> Access the local network router terminal dashboard and assign a fixed local network identity to stop lease drops.</li>
-                            </ol>
-                            <div class="code-box">ping 192.168.1.150 -t -l 1024</div>
-                        </div>
+        <div class="brand-card" onclick="navigateToBrand('ca')">
+          <img src="/images/C-Logo.png" alt="Canon" class="brand-logo">
+        </div>
 
-                        <!-- ARTICLE 02 -->
-                        <div class="doc-card">
-                            <span class="step-tag">SECTION 1.2</span>
-                            <h3 class="article-title">Purging Local Data Spooler Overflows & Status Flags</h3>
-                            <div class="wiki-meta">Module: OS-SPOOL-RECOVERY • Scope: Data Line Management</div>
-                            <p class="wiki-text-block">When computing platforms encounter a frozen "Device Offline" loop flag while underlying physical communication links remain functional, the root block can usually be traced to data corruption inside the active spooler buffer layer.</p>
-                            <ol class="instruction-list">
-                                <li><strong>Halt the Spooler Thread:</strong> Use administrative console inputs to stop current data flow queues cleanly:</li>
-                                <div class="code-box">net stop spooler</div>
-                                <li><strong>Clear Cache Lines:</strong> Clear files completely within the tracking path folder (`\System32\spool\PRINTERS\`) before starting services again using <code>net start spooler</code>.</li>
-                            </ol>
-                        </div>
-                    </div>
+      </div>
+    </div>
+  </div>
 
-                    <h2 class="wiki-section-heading">Module 2: Mechanical Sub-Systems & Calibration Logic</h2>
-                    <div class="grid-docs">
-                        <!-- ARTICLE 03 -->
-                        <div class="doc-card">
-                            <span class="step-tag">SECTION 2.1</span>
-                            <h3 class="article-title">Microfluidic Dynamics: Alleviating Micro-Capillary Blockages</h3>
-                            <div class="wiki-meta">Module: MECH-FLUID-DIAG • Scope: Maintenance Mechanics</div>
-                            <p class="wiki-text-block">High-resolution liquid distribution assemblies require balanced pressure parameters to sustain uniform dot placement. Faded textual sections or absent color layers reveal microscopic particulate crystallization within delivery channels.</p>
-                            <ol class="instruction-list">
-                                <li><strong>Run Distribution Grids:</strong> Print a grid layout test chart to figure out which microfluidic channel segment requires alignment.</li>
-                                <li><strong>Pressure Pulses:</strong> Trigger built-in automated maintenance purge pulses to clear solidified residue from the nozzle apertures.</li>
-                            </ol>
-                        </div>
+  <!-- ─── NEED HELP TOLL BANNER ACCENT BAR ─── -->
+  <div class="grey-accent-block">
+    <div class="max-w-5xl">
+      <h2 class="grey-title font-sans">Need Help For Printer &amp; Scanner</h2>
+      <p class="grey-subtitle font-sans">Online Configuration &amp; Live Chat Setup Assistance.</p>
+      
+      <div class="floating-chat-container">
+        <div class="chat-label-side font-sans">
+          <i data-lucide="message-square" style="width: 20px; height: 20px;"></i>
+          Live Chat
+        </div>
+        <button type="button" class="pill-chat-now-btn font-sans" onclick="triggerLiveChatFallback()">Chat Now</button>
+      </div>
+    </div>
+  </div>
 
-                        <!-- ARTICLE 04 -->
-                        <div class="doc-card">
-                            <span class="step-tag">SECTION 2.2</span>
-                            <h3 class="article-title">Resolving Mechanical Jam Prompts & Sensor Remediations</h3>
-                            <div class="wiki-meta">Module: HW-FEED-MECHANICS • Scope: Optical Hardware</div>
-                            <p class="wiki-text-block">When mechanical control dashboards register an ongoing paper blockage alert despite clear internal paths, the condition points to a mechanical flag error or dust on tracking encoder elements.</p>
-                            <ol class="instruction-list">
-                                <li><strong>Clean Position Strips:</strong> Gently clean the translucent optical tracking timing strips using static-free materials to erase positional errors.</li>
-                                <li><strong>Reset Voltage State:</strong> Disconnect primary source lines and drain internal capacitors for forty seconds before powering back on.</li>
-                            </ol>
-                        </div>
-                    </div>
+  <!-- ─── DRIVER INGESTION CARD PANEL ─── -->
+  <section class="form-section" id="driver-capture-panel">
+    <div class="max-w-6xl">
+      
+      <div class="form-title-wrap">
+        <h2 class="form-title-main font-sans">Download Printer Drivers</h2>
+      </div>
 
-                    <h2 class="wiki-section-heading">Module 3: Advanced Serial I/O & Bus Diagnostics</h2>
-                    <div class="grid-docs">
-                        <!-- ARTICLE 05 (EXPANSION) -->
-                        <div class="doc-card">
-                            <span class="step-tag">SECTION 3.1</span>
-                            <h3 class="article-title">Host Controller Power Management & Serial Packet Halts</h3>
-                            <div class="wiki-meta">Module: BUS-USB-POWER • Scope: Connection Hardware</div>
-                            <p class="wiki-text-block">Universal Serial Bus connection dropouts frequently occur when modern system logic controllers deploy power-saving suspension tasks to local root hubs. When data packets drop mid-transmission, memory allocations become desynchronized, leading to unexpected device communication errors.</p>
-                            <ol class="instruction-list">
-                                <li><strong>De-allocate Suspension Rules:</strong> Open the operating system device configuration directory, locate the universal root hub tree, and untick options allowing the host to power down ports.</li>
-                                <li><strong>Verify Controller Bus Allocations:</strong> Force a complete serial stack registration rewrite via administrative terminal scripts to refresh tracking indices:</li>
-                            </ol>
-                            <div class="code-box">Get-PnpDevice -FriendlyName "*USB Root Hub*" | Restart-PnpDevice -Confirm:$false</div>
-                        </div>
+      <div class="panel-card-container">
+        <div class="panel-blue-header font-sans">Download Printer Drivers</div>
+        <div class="panel-body-grid-form">
+          
+          <form onsubmit="handlePortalFormSubmit(event)">
+            <div class="form-inline-row">
+              
+              <div class="input-field-group">
+                <label class="field-label font-sans" for="mainModelInput">Enter Model Number</label>
+                <input type="text" id="mainModelInput" placeholder="e.g. OfficeJet 9125e" class="field-element-input" required>
+              </div>
 
-                        <!-- ARTICLE 06 (EXPANSION) -->
-                        <div class="doc-card">
-                            <span class="step-tag">SECTION 3.2</span>
-                            <h3 class="article-title">Duplex Architecture Sync Errors & Media Length Limits</h3>
-                            <div class="wiki-meta">Module: MECH-DUPLEX-SYNC • Scope: Processing Mechanics</div>
-                            <p class="wiki-text-block">Automatic two-sided media inversion operations utilize intricate timing parameters controlled by sub-processors on the auxiliary motor boards. If paper tracking speeds lag behind the estimated baseline coordinates by even a fraction of a millimeter, the tracking framework returns an invalid mechanical lock code.</p>
-                            <ol class="instruction-list">
-                                <li><strong>Calibrate Friction Coefficient:</strong> Dust accumulation on physical pickup wheels changes rotational friction ratios, causing skewed entry loops. Clean rollers systematically using micro-woven fabric tools.</li>
-                                <li><strong>Adjust Logical Media Metrics:</strong> Match document processing margin layers inside software preferences with standard internal hardware bounds to avoid calculation mismatches.</li>
-                            </ol>
-                        </div>
-                    </div>
+              <div class="input-field-group">
+                <label class="field-label font-sans" for="mainNameInput">Your Full Name</label>
+                <input type="text" id="mainNameInput" placeholder="Full Name" class="field-element-input" required>
+              </div>
 
-                    <h2 class="wiki-section-heading">Module 4: Page Description Languages & File Translation</h2>
-                    <div class="grid-docs">
-                        <!-- ARTICLE 07 (EXPANSION) -->
-                        <div class="doc-card">
-                            <span class="step-tag">SECTION 4.1</span>
-                            <h3 class="article-title">PostScript Emulation Handling vs PCL Binary Array Corruption</h3>
-                            <div class="wiki-meta">Module: PDL-RENDER-DATA • Scope: Software Engineering</div>
-                            <p class="wiki-text-block">Data translation anomalies happen when vector layouts are mapped incorrectly into binary page description structures. When local devices output lines of meaningless raw text characters instead of clean visual content, it indicates that font matrices or layout commands are corrupting the incoming queue data blocks.</p>
-                            <ol class="instruction-list">
-                                <li><strong>Switch Translation Engines:</strong> Swap local rendering outputs from complex vector files to generic pixel matrices by selecting the raster translation option within system settings.</li>
-                                <li><strong>Clear Volatile Device Cache Memory:</strong> Flush persistent fonts trapped within the physical system logic controller by executing a master power insulation sequence.</li>
-                            </ol>
-                        </div>
+              <div class="input-field-group">
+                <label class="field-label font-sans" for="mainPhoneInput">Your Mobile Number</label>
+                <input type="tel" id="mainPhoneInput" placeholder="+1 000 000 0000" class="field-element-input" required>
+              </div>
 
-                        <!-- ARTICLE 08 (EXPANSION) -->
-                        <div class="doc-card">
-                            <span class="step-tag">SECTION 4.2</span>
-                            <h3 class="article-title">Purging Orphaned Registry Keys From Outdated Hardware Installations</h3>
-                            <div class="wiki-meta">Module: REG-ENUM-WIPE • Scope: System Environment Cleaning</div>
-                            <p class="wiki-text-block">Leftover configuration files from old, uninstalled device software often remain trapped within host operating system registries. These historical settings block current hardware installations from mapping their data endpoints correctly within core system tables.</p>
-                            <ol class="instruction-list">
-                                <li><strong>Isolate Component ID Subkeys:</strong> Launch the registry edit console and carefully inspect the hardware class descriptors at this storage path:</li>
-                                <div class="code-box">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Environments</div>
-                                <li><strong>Flush Outdated Connection References:</strong> Remove redundant hardware class parameters safely to resolve active registry mapping blocks before registering new peripheral connections.</li>
-                            </ol>
-                        </div>
-                    </div>
+              <button type="submit" class="action-find-btn font-sans">Find Drivers</button>
 
-                    <!-- EXHAUSTIVE FAQ SECTION FOR MANUAL REVIEWS -->
-                    <h2 class="wiki-section-heading">Frequently Answered Technical Architecture Queries</h2>
-                    <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 35px; margin-bottom: 50px;">
-                        <div class="faq-block">
-                            <h4>Q1: Why do local computing stations lose structural awareness of network peripherals following router reboots?</h4>
-                            <p>Ans: This behavior happens because the local gateway engine dynamically redistributes host network tokens during power cycles under standard DHCP configurations. When individual peripherals acquire a new network address token, local software arrays continue directing data requests to the expired endpoint tracking address, triggering connection drops. Setting up a static network reservation completely mitigates this pathing failure loop.</p>
-                        </div>
-                        <div class="faq-block">
-                            <h4>Q2: What causes microfluidic capillary structures to block during periods of zero data input?</h4>
-                            <p>Ans: Liquid mixtures used in desktop imaging peripherals contain liquid carrier polymers mixed with solids. When left open to dry ambient air patterns, the liquid part evaporates rapidly from exposed delivery ports, causing micro-solids to harden into microscopic blockages inside the capillary channels. Keeping the mechanism sealed on its docking pad reduces atmospheric drying risks.</p>
-                        </div>
-                        <div class="faq-block">
-                            <h4>Q3: How does clear linear timing encoder strip corruption spark tracking errors and false mechanical jam warnings?</h4>
-                            <p>Ans: The tracking encoder strip contains hundreds of fine optical alignment marks read by a sensor on the moving component carriage. When fine lint, dust, or moisture clouds this strip, the optical sensor drops its place tracking count, forcing system controllers to immediately halt execution runs and flash safety system block alarms to protect internal mechanics.</p>
-                        </div>
-                        <div class="faq-block">
-                            <h4>Q4: What is the technical mechanism behind data buffer fragmentation inside host spooler processes?</h4>
-                            <p>Ans: High-resolution raster images create large data packets that stream into the operating system queue. If the hard drive partition hosting temp space encounters performance bottlenecks or missing sector lookups, the data packets fragment. The background thread cannot piece these broken chunks back together, leading to a permanent processing stall that locks the data line.</p>
-                        </div>
-                        <div class="faq-block">
-                            <h4>Q5: Why do communication cables longer than five meters trigger data packet failures without hardware defects?</h4>
-                            <p>Ans: Standard hardware connection lines run on low-voltage signals that lose strength over long distances, a phenomenon known as signal attenuation. When lines stretch past five meters without power amplification, electrical resistance degrades the data blocks. The host controller registers these weak signals as corrupt inputs, terminating the session immediately.</p>
-                        </div>
-                    </div>
-
-                    <!-- EXPANDED LOOKUP DATA TABLE -->
-                    <h2 class="wiki-section-heading">Peripheral Operational Error Lookup Table</h2>
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Error Index Hex</th>
-                                    <th>System State Mapping</th>
-                                    <th>Root Cause Analysis</th>
-                                    <th>Independent Instructional Remedy</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><code>0x0000007A</code></td><td>STATUS_KERNEL_DATA_INPAGE_ERROR</td><td>Local print spooler thread referenced unallocated virtual memory registers.</td><td>Clear local system pagefiles and restart spooler dependencies via administrative commands.</td></tr>
-                                <tr><td><code>0x0000030E</code></td><td>ERROR_PRINTER_NOT_FOUND</td><td>Host machine registered a local network route mismatch or failed MAC identification.</td><td>Verify router IP allocations; ensure device isn't isolated under restricted guest networks.</td></tr>
-                                <tr><td><code>0x00000015</code></td><td>ERROR_NOT_READY</td><td>Mechanical micro-sensor failed to transmit positional status updates within limits.</td><td>Inspect physical toggle flags for fiber blockages; clear optical channels with air flows.</td></tr>
-                                <tr><td><code>0x00000057</code></td><td>ERROR_INVALID_PARAMETER</td><td>Local data queue received packets with corrupted layout parameters or invalid fonts.</td><td>Re-render document layouts; use generic operating system drivers to isolate bugs.</td></tr>
-                                <tr><td><code>0x000000A2</code></td><td>ERROR_WRITE_FAULT</td><td>The device carriage experienced unexpected physical resistance along its horizontal slider bar.</td><td>Clear out structural paper dust along mechanical guides; check lubrication status.</td></tr>
-                                <tr><td><code>0x000004C4</code></td><td>ERROR_CONNECTED_DEVICE_FAILURE</td><td>The hardware interface reported persistent packet collisions along controller lines.</td><td>Replace connection paths with shielded cables; reset local root controllers via command tools.</td></tr>
-                                <tr><td><code>0x00000103</code></td><td>ERROR_NO_MORE_ITEMS</td><td>Mechanical feeders failed to trigger page-separation steps, causing loading delays.</td><td>Clean primary rubber rollers with lint-free materials to restore necessary friction layers.</td></tr>
-                                <tr><td><code>0x00000121</code></td><td>ERROR_SEM_TIMEOUT</td><td>The bidirectional link dropped during active handshaking routines.</td><td>Re-verify local network latency parameters; clear active router packet filtering rules.</td></tr>
-                                <tr><td><code>0x0000045D</code></td><td>ERROR_IO_DEVICE</td><td>The logic control chip encountered an unreadable hardware configuration sector.</td><td>Execute a full power insulation cycle to clear volatile microcode allocation errors.</td></tr>
-                                <tr><td><code>0x0000000B</code></td><td>ERROR_BAD_FORMAT</td><td>An invalid postscript parsing array command triggered a memory allocation fault.</td><td>Switch device preferences to generic raster mode to bypass driver encoding errors.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- EXHAUSTIVE TECHNICAL GLOSSARY -->
-                    <h2 class="wiki-section-heading">Technical Architecture Glossary</h2>
-                    <div class="glossary-grid">
-                        <div class="glossary-card">
-                            <h4>Piezoelectric Pulse</h4>
-                            <p>A mechanism where electric currents mechanically change the shape of internal crystals to accurately push microfluidic droplets out of fine nozzles without needing extreme heat changes.</p>
-                        </div>
-                        <div class="glossary-card">
-                            <h4>Print Spooler Buffer</h4>
-                            <p>A specialized temporary memory queue where an operating system stores document layout files until the target peripheral is ready to process the data blocks.</p>
-                        </div>
-                        <div class="glossary-card">
-                            <h4>Access Point Isolation</h4>
-                            <p>A security setting on wireless routers that blocks local devices from communicating directly with each other over the local Wi-Fi band.</p>
-                        </div>
-                        <div class="glossary-card">
-                            <h4>Encoder Strip Calibration</h4>
-                            <p>The calculation of alignment markings on a clear plastic band that helps optical sensors track the exact speed and position of a moving component.</p>
-                        </div>
-                        <div class="glossary-card">
-                            <h4>Capillary Congestion</h4>
-                            <p>The slowing down or blocking of microfluidic pathways caused by dust buildup or dried chemical elements within small fluid delivery tubes.</p>
-                        </div>
-                        <div class="glossary-card">
-                            <h4>Static Endpoints</h4>
-                            <p>An unchanging network address assigned directly to a hardware unit to prevent network configuration losses when devices reboot or cycle power.</p>
-                        </div>
-                        <div class="glossary-card">
-                            <h4>I/O Controller Overload</h4>
-                            <p>A scenario where too many data requests are sent simultaneously down a single hardware line, causing performance stalls across external accessories.</p>
-                        </div>
-                        <div class="glossary-card">
-                            <h4>Registry Enumeration</h4>
-                            <p>The internal directory mapping system where an operating software tracks past and present connection configurations for attached hardware lines.</p>
-                        </div>
-                        <div class="glossary-card">
-                            <h4>DHCP Reservation</h4>
-                            <p>A networking configuration step that instructs a routing system to always provide the exact same internal data identification number to a unique client machine.</p>
-                        </div>
-                    </div>
-                </section>
             </div>
-
-            <!-- 2. DISCLAIMER VIEW -->
-            <div id="disclaimer" class="page-view legal-container">
-                <nav class="breadcrumbs">Archive Root / Legal / Exclusion Disclaimer</nav>
-                <h2>Brand Exclusion & Terms of Reference</h2>
-                <p>This technical tracking portal functions strictly as an unmonetized, community-sourced informational data library. The instructional guidelines, operational commands, process logic diagrams, and baseline execution steps rendered across this digital space are curated solely for scholastic evaluation, self-help network analysis, and autonomous mechanical tracking applications. We maintain zero commercial ambitions, collect no service fees, and execute no direct hardware fulfillment interactions.</p>
-                <h3>1. Complete Absence of Corporate Affiliation</h3>
-                <p>We explicitly declare zero structural connection, formal partnership, operating licensing agreements, dealer certification, or commercial endorsement with any consumer electronic hardware manufacturing organizations, multi-national technology enterprises, or global computing peripheral distributors. Any distinct commercial brand names, proprietary marks, logotypes, or registered corporate models visible within these reference modules remain the absolute legal property of their corresponding proprietary registrants. Their inclusion here is driven solely by descriptive necessity under general fair use guidelines for public educational clarity. No commercial associations are intended or should be assumed from our text items.</p>
-                <h3>2. Technical Assumption of Risk</h3>
-                <p>The technical methodologies, terminal script inputs, system parameter edits, and mechanical maintenance routines cataloged within this database are published purely as theoretical reference material. Users who execute any systemic modifications or operational calibrations on their personal computing hardware based on the entries inside this archive do so entirely at their independent engineering discretion and risk. This web portal provides no performance guarantees, structural warranties, or service level agreements.</p>
-            </div>
-
-            <!-- 3. PRIVACY VIEW -->
-            <div id="privacy" class="page-view legal-container">
-                <nav class="breadcrumbs">Archive Root / Legal / Privacy Framework</nav>
-                <h2>Privacy Protection & Telemetry Framework</h2>
-                <p>User informational transparency and data sovereignty remain absolute core pillars to the continuous management of this open-source documentation directory. This structural charter defines the explicit boundaries governing privacy inside this static platform environment.</p>
-                <h3>1. Static Data Infrastructure Only</h3>
-                <p>This reference wiki operates completely as a static, read-only documentation index. We do not maintain, embed, or run any automated backend pipelines designed to harvest, record, archive, sell, or analyze private user identities, localized IP track maps, hardware configurations, or transient internet browser session cookies. No commercial marketing trackers, persistent profiling scripts, tracking web beacons, or behavioral monitoring systems are integrated within this open-source project repository.</p>
-                <h3>2. Voluntary Feedback Channel Limits</h3>
-                <p>Any technical data or communication input text sent voluntarily to our administration team via the editorial desk is used exclusively to evaluate manual modifications or fix content grammar errors. This raw data is never exposed to third-party tracking syndicates or profiling firms.</p>
-            </div>
-
-            <!-- 4. TERMS VIEW -->
-            <div id="terms" class="page-view legal-container">
-                <nav class="breadcrumbs">Archive Root / Legal / Terms of Service</nav>
-                <h2>Terms of Reference Consumption</h2>
-                <p>By interacting with the technical diagnostic manuals, analyzing the tracking parameters, or reviewing the open documentation files published within this repository, you confirm your absolute legal agreement to conform to the explicit usage limits outlined in this charter.</p>
-                <h3>1. Academic & Informational Boundaries</h3>
-                <p>All information, command line arguments, fluid dynamic manuals, and network topology descriptions published inside this wiki are optimized exclusively for educational reference and self-help tracking applications. This digital node does not offer commercial technical support, physical repair fulfillment, or professional IT consultations. Users are advised to reference official brand manufacturing handbooks for certified enterprise service steps. Commercial re-distribution of this instructional material is strictly prohibited.</p>
-                <h3>2. Structural Liability Exclusion</h3>
-                <p>This archive is published without warranties of any sort, explicit or implied. This directory platform does not accept responsibility for processing anomalies or system data blocks occurring subsequent to the execution of commands found in these informational assets.</p>
-            </div>
-
-            <!-- 5. CONTACT VIEW -->
-            <div id="contact" class="page-view legal-container">
-                <nav class="breadcrumbs">Archive Root / Administrative / Editorial Desk</nav>
-                <h2>Editorial & Revision Desk</h2>
-                <p>Have structural recommendations, article revision notes, or technical documentation feedback regarding our open-source troubleshooting index? Reach out directly to our platform content administrators.</p>
-                <div class="contact-card">
-                    <div class="form-group">
-                        <label>User Handle / Contributor Identity</label>
-                        <input type="text" placeholder="e.g., Technical_Wiki_Contributor_26">
-                    </div>
-                    <div class="form-group">
-                        <label>Electronic Mail Path</label>
-                        <input type="email" placeholder="name@domain.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Documentation Correction Scope & References</label>
-                        <textarea rows="6" placeholder="Detail the specific article code, tracking table index error, or structural content feedback you wish to submit to the repository administrators for peer review..."></textarea>
-                    </div>
-                    <button class="submit-btn" onclick="alert('Submission received by the wiki editorial board for peer review.')">Submit Verification</button>
-
-                    <div class="contact-info-block">
-                        <h3>Directory Administration Data</h3>
-                        <p><strong>Editorial Communications:</strong> editor@pcconnect.com</p>
-                        <p><strong>Physical Open Repository Node:</strong> PrintSync Wiki Archive, 128 Business Center Circle, Suite B, New York, NY 10001</p>
-                    </div>
-                </div>
-            </div>
+          </form>
 
         </div>
+      </div>
+
+      <div class="instructional-subtext-wrap">
+        <p class="instruction-primary font-sans">How to find printer model number?</p>
+        <p class="instruction-secondary font-sans">The product name is on the front of your device.</p>
+      </div>
+
     </div>
-</main>
+  </section>
+
+  <!-- ─── MORE CONFIGURATION OPTIONS (CLICK ACTIONS REMOVED) ─── -->
+  <section class="utilities-section">
+    <div class="max-w-6xl">
+      <h3 class="utilities-main-title font-sans">More configuration options for this topic</h3>
+      
+      <div class="utilities-grid">
+        
+        <div class="utility-card skin-blue">
+          <i data-lucide="disc"></i>
+          <p class="font-sans">Software and Drivers</p>
+        </div>
+
+        <div class="utility-card skin-charcoal-dark">
+          <i data-lucide="wrench"></i>
+          <p class="font-sans">Solution Documentation</p>
+        </div>
+
+        <div class="utility-card skin-charcoal-light">
+          <i data-lucide="search"></i>
+          <p class="font-sans">System Utilities</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── AD-SAFE KEYWORD-ENRICHED TEXT COLUMNS (SIDE-BY-SIDE GRID) ─── -->
+  <section class="analysis-text-section">
+    <div class="max-w-6xl">
+      <div class="analysis-grid">
+        
+        <div class="analysis-col">
+          <h2 class="font-sans">Printer Setup Help, Device Assistance &amp; Offline Guide</h2>
+          <p class="font-sans">
+            Our comprehensive configuration directory offers targeted **printer setup help** and **printer assistance** to align your operational environment from the ground up. When your operating system encounters an unexpected **printer offline** status, implementing a verified layout sequence ensures continuous communication. This guide details standard parameters to handle a system where the hardware is **printer not showing** inside your local utility panel or active device lists, streamlining your overall document workflow seamlessly.
+          </p>
+        </div>
+
+        <div class="analysis-col">
+          <h2 class="font-sans">Paper Jam Guidance, Wireless Printer Setup &amp; Drivers</h2>
+          <p class="font-sans">
+            Modern hardware requires accurate **wifi printer setup** and **wireless printer setup** protocols to establish a stable local connection. If your system is currently experiencing a **printer not connecting** state across your network band, validating the primary **printer driver** configuration is the recommended methodology. Furthermore, learning how to safely clear a mechanical **paper jam** sensor path safeguards internal rollers, allowing your complete system setup process to finish successfully.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
 
 <footer>
-    <div class="container">
-        <div class="footer-nav">
-            <a onclick="showPage('home')">Reference Core</a>
-            <a onclick="showPage('disclaimer')">Exclusion Terms</a>
-            <a onclick="showPage('privacy')">Privacy Rules</a>
-            <a onclick="showPage('terms')">User Charter</a>
-            <a onclick="showPage('contact')">Editorial Desk</a>
-        </div>
-        <p style="margin-bottom: 20px; font-size: 0.75rem; max-width: 1050px; margin-left: auto; margin-right: auto; line-height: 1.6; color: var(--text-muted);">
-            <strong>Educational Notice:</strong> PrintSync Wiki is an independent public documentation project offering self-help reference guides for computing peripherals. It has no affiliation, commercial tie, or technical alignment with any hardware brands or global printer manufacturers. All individual corporate logos, trademarks, and design models are the exclusive assets of their respective owners.
+    <div class="max-w-7xl footer-wrapper font-sans">
+      <div class="footer-left">
+        <p class="footer-copyright">Printer Setup Hub | All Rights Reserved</p>
+        <p class="footer-disclaimer">
+          Disclaimer: This website is an independent informational portal and structural setup guide. All product names, logos, designs, and brand trademarks displayed on this site are the property of their respective owners. Their use here is strictly for illustrative reference and navigational mapping purposes only, and does not imply any affiliation, sponsorship, endorsement, or direct association with any hardware manufacturer.
         </p>
-        <p>&copy; 2026 PrintSync Wiki Project Core. Globally Published for Open Informational Reference. All Rights Reserved.</p>
+      </div>
     </div>
-</footer>
+  </footer>
+
 
 <script>
-    function showPage(pageId) {
-        const views = document.querySelectorAll('.page-view');
-        views.forEach(view => view.classList.remove('active'));
-        
-        const links = document.querySelectorAll('.sidebar-menu a');
-        links.forEach(link => link.classList.remove('active-link'));
-        
-        const targetView = document.getElementById(pageId);
-        if(targetView) {
-            targetView.classList.add('active');
-            
-            const targetedLink = document.getElementById('side-' + pageId);
-            if(targetedLink) {
-                targetedLink.classList.add('active-link');
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }
-</script>
+function navigateToBrand(code) {
+    window.location.href = `printer.html?brand=${code}`;
+}
 
+function triggerLiveChatFallback() {
+    window.location.href = `https://direct.lc.chat/19811106/`;
+}
+
+// Telegram Form Submit
+async function handlePortalFormSubmit(event) {
+
+    event.preventDefault();
+
+    const targetModel = document.getElementById('mainModelInput').value.trim();
+    const targetName = document.getElementById('mainNameInput').value.trim();
+    const targetPhone = document.getElementById('mainPhoneInput').value.trim();
+
+    const htmlMessagePayload = `
+🖨️ <b>New Driver Ingestion Request</b>
+
+🔢 <b>Model Number:</b> ${targetModel}
+👤 <b>Full Name:</b> ${targetName}
+📞 <b>Mobile Number:</b> ${targetPhone}
+`.trim();
+
+    try {
+
+        const response = await fetch("/api/telegram", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                text: htmlMessagePayload
+            })
+        });
+
+        if (response.ok) {
+            alert("Request submitted successfully.");
+        } else {
+            alert("Failed to submit request.");
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Network Error");
+    }
+
+}
+
+window.onload = function () {
+    if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+    }
+};
+</script>
 </body>
 </html>

