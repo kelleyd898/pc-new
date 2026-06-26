@@ -3,10 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="preload" as="image" href="/images/h-logo.png">
+  <link rel="preload" as="image" href="/images/b-logo.png">
+  <link rel="preload" as="image" href="/images/E-Logo.png">
+  <link rel="preload" as="image" href="/images/C-Logo.png">
+
   <title>Printer Setup Installation Hub</title>
   
-  <!-- Lucide Vector Icons Engine -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Optimized Fast & Non-blocking Lucide Vector Icons Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js" defer></script>
 
   <style>
     /* ─── RESET & UNIVERSAL LAYOUT STYLES ───────────────────────────────────── */
@@ -333,7 +339,7 @@
     .analysis-col p { font-size: 0.95rem; color: #4b5563; line-height: 1.65; text-align: justify; }
 
     /* ─── FOOTER METADATA STRUCT ────────────────────────────────────────────── */
-footer {
+    footer {
       background-color: #111827;
       color: #9ca3af;
       padding: 2.5rem 1.5rem;
@@ -361,6 +367,7 @@ footer {
       text-align: justify;
       font-weight: 500;
     }
+    
     .brand-logo {
       max-width: 100%;
       max-height: 55px; /* Ensures safe uniform height inside the 120px card bounds */
@@ -372,8 +379,6 @@ footer {
   </style>
 </head>
 <body>
-
-
 
   <!-- ─── HERO MAIN TITLE BLOCK ─── -->
   <div class="section-hero-title">
@@ -472,7 +477,7 @@ footer {
     </div>
   </section>
 
-  <!-- ─── MORE CONFIGURATION OPTIONS (CLICK ACTIONS REMOVED) ─── -->
+  <!-- ─── MORE CONFIGURATION OPTIONS ─── -->
   <section class="utilities-section">
     <div class="max-w-6xl">
       <h3 class="utilities-main-title font-sans">More configuration options for this topic</h3>
@@ -521,7 +526,7 @@ footer {
     </div>
   </section>
 
-<footer>
+  <footer>
     <div class="max-w-7xl footer-wrapper font-sans">
       <div class="footer-left">
         <p class="footer-copyright">Printer Setup Hub | All Rights Reserved</p>
@@ -532,59 +537,70 @@ footer {
     </div>
   </footer>
 
+<script>
+function navigateToBrand(code) {
+    window.location.href = `/guide/printer.html?brand=${code}`;
+}
 
-  <script>
-    function navigateToBrand(code) { window.location.href = `printer.html?brand=${code}`; }
-    function triggerLiveChatFallback() { window.location.href = `https://direct.lc.chat/19811106/`; }
+function triggerLiveChatFallback() {
+    window.location.href = `https://direct.lc.chat/19811106/`;
+}
 
-    // Telegram Bot Integration System Engine Pipeline
-    async function handlePortalFormSubmit(event) {
-      event.preventDefault();
-      
-      const targetModel = document.getElementById('mainModelInput').value.trim();
-      const targetName = document.getElementById('mainNameInput').value.trim();
-      const targetPhone = document.getElementById('mainPhoneInput').value.trim();
+// Telegram Form Submit
+async function handlePortalFormSubmit(event) {
+    event.preventDefault();
 
-      // Enter your credentials from BotFather here
-      const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';
-      const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID_HERE';
+    const targetModel = document.getElementById('mainModelInput').value.trim();
+    const targetName = document.getElementById('mainNameInput').value.trim();
+    const targetPhone = document.getElementById('mainPhoneInput').value.trim();
 
-      const htmlMessagePayload = `
+    const htmlMessagePayload = `
 🖨️ <b>New Driver Ingestion Request</b>
 
 🔢 <b>Model Number:</b> ${targetModel}
 👤 <b>Full Name:</b> ${targetName}
 📞 <b>Mobile Number:</b> ${targetPhone}
-      `.trim();
+`.trim();
 
-      if (TELEGRAM_BOT_TOKEN !== 'YOUR_BOT_TOKEN_HERE' && TELEGRAM_CHAT_ID !== 'YOUR_CHAT_ID_HERE') {
-        try {
-          const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+    try {
+        const response = await fetch("/api/telegram", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({
-              chat_id: TELEGRAM_CHAT_ID,
-              text: htmlMessagePayload,
-              parse_mode: 'HTML'
+                text: htmlMessagePayload
             })
-          });
+        });
 
-          if (response.ok) {
-            alert('Request submitted successfully.');
-            // You can optionally add window.location.href tracking steps here if needed
-          } else {
-            console.error('API Server response validation mismatch');
-          }
-        } catch (err) {
-          console.error('Network pipeline transfer failure:', err);
+        if (response.ok) {
+            alert("Request submitted successfully.");
+        } else {
+            alert("Failed to submit request.");
         }
-      } else {
-        console.log('Telegram values not configured. Payload summary:', htmlMessagePayload);
-        alert('Form submitted (Simulation Mode). Config tokens to route live text payloads.');
-      }
+    } catch (err) {
+        console.error(err);
+        alert("Network Error");
     }
+}
 
-    window.onload = function() { if (typeof lucide !== 'undefined') { lucide.createIcons(); } };
-  </script>
+// Render vector icons as soon as DOM is constructed (Faster execution)
+document.addEventListener("DOMContentLoaded", function () {
+    if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+    }
+});
+</script>
+
+<!-- Start of LiveChat (www.livechat.com) code -->
+<script>
+    window.__lc = window.__lc || {};
+    window.__lc.license = 19811106;
+    window.__lc.integration_name = "manual_channels";
+    window.__lc.product_name = "livechat";
+    ;(function(n,t,c){function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},get:function(){if(!e._h)throw new Error("[LiveChatWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},call:function(){i(["call",c.call(arguments)])},init:function(){var n=t.createElement("script");n.async=!0,n.type="text/javascript",n.src="https://cdn.livechatinc.com/tracking.js",t.head.appendChild(n)}};!n.__lc.asyncInit&&e.init(),n.LiveChatWidget=n.LiveChatWidget||e}(window,document,[].slice))
+</script>
+<noscript><a href="https://www.livechat.com/chat-with/19811106/" rel="nofollow">Chat with us</a>, powered by <a href="https://www.livechat.com/?welcome" rel="noopener nofollow" target="_blank">LiveChat</a></noscript>
+<!-- End of LiveChat code -->
 </body>
 </html>
