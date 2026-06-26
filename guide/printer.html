@@ -48,6 +48,30 @@
     nav span { cursor: pointer; text-transform: capitalize; transition: color 0.2s; }
     nav span:hover { color: #000000; }
 
+    /* ─── ADDED: NAVBAR CENTER CONTACT STYLES ───────────────────────────────── */
+    .nav-contact-center {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #111827;
+      letter-spacing: 0.02em;
+    }
+
+    @keyframes phone-ring-shake {
+      0%, 100% { transform: rotate(0deg); }
+      5%, 15%, 25% { transform: rotate(-15deg); }
+      10%, 20%, 30% { transform: rotate(15deg); }
+      35% { transform: rotate(0deg); }
+    }
+
+    .shake-icon {
+      display: inline-block;
+      animation: phone-ring-shake 2s infinite ease-in-out;
+      color: #2563eb;
+    }
+
     /* ─── HERO BANNER BLOCK (STRICT HORIZONTAL ALIGNMENT - NO WRAP) ─────────── */
     .hero {
       color: #ffffff;
@@ -277,6 +301,12 @@
       <div class="logo-container">
         <img id="brand-logo" src="" alt="Brand Logo" class="logo-img">
       </div>
+
+      <div class="nav-contact-center font-sans">
+        <i data-lucide="phone" class="shake-icon" style="width: 20px; height: 20px;"></i>
+        <span>612-314-9536</span>
+      </div>
+
       <nav id="navbar-links"></nav>
     </div>
   </header>
@@ -431,7 +461,7 @@
                 <p id="error-code-display" class="err-code-txt font-mono"></p>
               </div>
             </div>
-            <img src="/images/S2.png" alt="Support Channels" class="err-s2-img">
+            <img src="/images/S3.png"  class="err-s2-img">
           </div>
         </div>
 

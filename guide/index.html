@@ -370,15 +370,55 @@
     
     .brand-logo {
       max-width: 100%;
-      max-height: 55px; /* Ensures safe uniform height inside the 120px card bounds */
+      max-height: 55px; 
       width: auto;
       height: auto;
       object-fit: contain;
       display: block;
     }
+
+    /* ─── STICKY LEFT CONTACT STYLING (WITH ICON SHAKE ANIMATION) ───────────── */
+    .sticky-left-contact {
+      position: fixed;
+      left: 0;
+      top: 58%; 
+      transform: translateY(-50%);
+      background-color: #0085FF;
+      color: #ffffff;
+      padding: 0.75rem 1.50rem;
+      font-size: 1.1rem;
+      font-weight: 800;
+      border-radius: 0 0.5rem 0.5rem 0;
+      box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.2);
+      z-index: 99999;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    /* Shake Ring Animation for the Icon */
+    @keyframes phone-ring-shake {
+      0%, 100% { transform: rotate(0deg); }
+      5%, 15%, 25% { transform: rotate(-15deg); }
+      10%, 20%, 30% { transform: rotate(15deg); }
+      35% { transform: rotate(0deg); }
+    }
+
+    .shake-icon {
+      display: inline-block;
+      animation: phone-ring-shake 2s infinite ease-in-out;
+    }
   </style>
 </head>
 <body>
+
+  <!-- STICKY LEFT CONTACT TAB WITH SHAKING PHONE ICON -->
+  <div class="sticky-left-contact font-sans">
+    <i data-lucide="phone" class="shake-icon" style="width: 30px; height: 30px;"></i>
+    612-314-9536
+  </div>
 
   <!-- ─── HERO MAIN TITLE BLOCK ─── -->
   <div class="section-hero-title">
@@ -416,20 +456,31 @@
   </div>
 
   <!-- ─── NEED HELP TOLL BANNER ACCENT BAR ─── -->
-  <div class="grey-accent-block">
-    <div class="max-w-5xl">
-      <h2 class="grey-title font-sans">Need Help For Printer &amp; Scanner</h2>
-      <p class="grey-subtitle font-sans">Online Configuration &amp; Live Chat Setup Assistance.</p>
-      
-      <div class="floating-chat-container">
-        <div class="chat-label-side font-sans">
-          <i data-lucide="message-square" style="width: 20px; height: 20px;"></i>
-          Live Chat
-        </div>
-        <button type="button" class="pill-chat-now-btn font-sans" onclick="triggerLiveChatFallback()">Chat Now</button>
-      </div>
-    </div>
-  </div>
+ <div class="grey-accent-block">
+
+<div class="max-w-5xl">
+
+<h2 class="grey-title font-sans">Need Help For Printer &amp; Scanner</h2>
+
+<p class="grey-subtitle font-sans">Online Configuration &amp; Live Chat Setup Assistance.</p>
+
+<div class="floating-chat-container">
+
+<div class="chat-label-side font-sans">
+
+<i data-lucide="message-square" style="width: 20px; height: 20px;"></i>
+
+Live Chat
+
+</div>
+
+<button type="button" class="pill-chat-now-btn font-sans" onclick="triggerLiveChatFallback()">Chat Now</button>
+
+</div>
+
+</div>
+
+</div>
 
   <!-- ─── DRIVER INGESTION CARD PANEL ─── -->
   <section class="form-section" id="driver-capture-panel">
