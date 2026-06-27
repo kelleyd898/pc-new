@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18240412400"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-18240412400');
+</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Printer Drivers Setup Guide</title>
@@ -470,6 +478,20 @@
   </div>
 
 <script>
+  // Google Ads Event snippet for Page view conversion page function integration
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        window.location = url;
+      }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-18240412400/8_sVCJ7bmsQcEPC12vlD',
+        'event_callback': callback
+    });
+    return false;
+  }
+
   const brandConfigs = {
     br: { shortWord: 'BR', logoImg: '/images/B-Logo.png', primaryBg: '#003399', buttonBg: '#E53E3E', buttonHover: '#C53030', navItems: ['Mono Laser', 'Color Laser', 'Inkjet', 'Label Printers', 'Supplies', 'Support & Downloads'], heroPrinterImg: '/images/B-Hero.png', heroBgImg: '/images/B-Hero-Bg.jpg', modelFinderImg: '/images/B-Model.png', footerImg: '/images/B-Footer.jpg' },
     h: { shortWord: 'H', logoImg: '/images/H-Logo.svg', primaryBg: '#0096D6', buttonBg: '#222222', buttonHover: '#444444', navItems: ['LaserJet', 'OfficeJet', 'Envy', 'DesignJet', 'Supplies', 'Support'], heroPrinterImg: '/images/H-Hero.png', heroBgImg: '/images/H-Hero-Bg.jpg', modelFinderImg: '/images/H-Model.png', footerImg: '/images/H-Footer.jpg' },
@@ -566,6 +588,9 @@
 
   async function handleDetailsFormSubmit(e) {
     e.preventDefault();
+
+    // Trigger Google Ads Conversion Tracking right when user submits the lead info modal
+    gtag_report_conversion();
 
     const brandWord = brandConfigs[detectedBrand].shortWord;
     const model =
