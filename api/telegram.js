@@ -19,7 +19,7 @@ export default async function handler(req, res) {
           text: req.body.text,
           parse_mode: "HTML",
         }),
-      }
+      },
     );
 
     const data = await response.json();
@@ -31,7 +31,6 @@ export default async function handler(req, res) {
     return res.status(200).json({
       success: true,
     });
-
   } catch (e) {
     return res.status(500).json({
       success: false,
