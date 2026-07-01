@@ -537,9 +537,7 @@
       }
     </style>
 
-
-<script src="//code.jivosite.com/widget/vgcVGhlYgu" async></script>
-
+    <script src="//code.jivosite.com/widget/vgcVGhlYgu" async></script>
   </head>
   <body>
     <div class="sticky-left-contact font-sans">
@@ -614,13 +612,13 @@
             Live Chat
           </div>
 
-          <!-- <button
+          <button
             type="button"
             class="pill-chat-now-btn font-sans"
             onclick="triggerLiveChatFallback()"
           >
             Chat Now
-          </button> -->
+          </button>
         </div>
       </div>
     </div>
@@ -788,7 +786,11 @@
       }
 
       function triggerLiveChatFallback() {
-        window.location.href = `https://direct.lc.chat/19811106/`;
+        if (window.jivo_api) {
+          window.jivo_api.open();
+        } else {
+          setTimeout(triggerLiveChatFallback, 500);
+        }
       }
 
       // Telegram Form Submit
@@ -842,6 +844,5 @@
         }
       });
     </script>
-
   </body>
 </html>
