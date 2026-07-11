@@ -224,24 +224,127 @@
 
       .hero-btn {
         align-self: flex-start;
-        color: #ffffff;
-        font-size: 1rem;
-        font-weight: 700;
-        padding: 0.875rem 1.75rem;
-        border-radius: 9999px;
-        border: none;
-        cursor: pointer;
         display: inline-flex;
         align-items: center;
-        gap: 0.75rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        transition: all 0.2s ease;
+        gap: 14px;
+
+        padding: 16px 28px;
+        border: none;
+        border-radius: 999px;
+
+        background: linear-gradient(135deg, #0a84ff, #0066ff);
+        color: #ffffff;
+
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+
+        box-shadow: 0 12px 28px rgba(0, 133, 255, 0.35);
+
+        transition: all 0.35s ease;
+
+        animation: heroButtonPulse 2.5s infinite;
       }
+
+      /* Moving Shine */
+      .hero-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -140%;
+        width: 45%;
+        height: 100%;
+
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.45),
+          transparent
+        );
+
+        transform: skewX(-25deg);
+
+        animation: heroButtonShine 3s linear infinite;
+      }
+
       .hero-btn:hover {
-        transform: scale(1.03);
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 18px 40px rgba(0, 133, 255, 0.45);
       }
+
       .hero-btn:active {
-        transform: scale(0.95);
+        transform: scale(0.96);
+      }
+
+      .hero-btn-text {
+        position: relative;
+        z-index: 2;
+      }
+
+      .hero-btn-icon {
+        position: relative;
+        z-index: 2;
+
+        width: 38px;
+        height: 38px;
+
+        background: #fff;
+        color: #0085ff;
+
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 20px;
+        font-weight: 900;
+
+        transition: 0.3s;
+
+        animation: heroArrowMove 1.3s ease-in-out infinite;
+      }
+
+      .hero-btn:hover .hero-btn-icon {
+        transform: translateX(6px) rotate(-8deg) scale(1.1);
+      }
+
+      /* ================= Animations ================= */
+
+      @keyframes heroButtonPulse {
+        0%,
+        100% {
+          box-shadow: 0 12px 28px rgba(0, 133, 255, 0.35);
+        }
+
+        50% {
+          box-shadow: 0 18px 42px rgba(0, 133, 255, 0.55);
+        }
+      }
+
+      @keyframes heroButtonShine {
+        0% {
+          left: -140%;
+        }
+
+        100% {
+          left: 180%;
+        }
+      }
+
+      @keyframes heroArrowMove {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+
+        50% {
+          transform: translateX(5px);
+        }
       }
 
       .hero-img-side {
@@ -866,7 +969,9 @@
             <li>Click on Download to install the drivers</li>
           </ul>
           <button type="button" class="hero-btn" onclick="openSetupModal()">
-            Download Now <span>➔</span>
+            <span class="hero-btn-text">Download Now</span>
+
+            <span class="hero-btn-icon"> ➜ </span>
           </button>
         </div>
         <div class="hero-img-side">
