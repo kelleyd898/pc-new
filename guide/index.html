@@ -129,7 +129,8 @@
       /* ─── HERO ARCHITECTURE ─────────────────────────────────────────────────── */
       .section-hero-title {
         text-align: center;
-        padding: 3rem 1.5rem 1.5rem 1.5rem;
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+        margin-right: 8rem;
         background-color: #ffffff;
       }
 
@@ -188,7 +189,8 @@
       /* ===================== BRAND SECTION ===================== */
 
       .brand-section {
-        padding: 1.5rem 1.5rem 3rem;
+        padding: 1rem 1rem 1rem;
+        margin-right: 8rem;
         background: #fff;
       }
 
@@ -201,24 +203,31 @@
       .brand-card {
         flex: 1;
         display: flex;
-        align-items: center;
+        flex-direction: column;
         justify-content: center;
+        align-items: center;
+        gap: 22px;
+
         background: #fff;
         border: 2px solid #dbe3ec;
         border-radius: 18px;
-        min-height: 170px;
-        padding: 2rem;
+
+        min-height: 230px;
+
+        padding: 25px;
+
         cursor: pointer;
+
         position: relative;
         overflow: hidden;
-        transition: all 0.3s ease;
+
+        transition: 0.35s;
+
         box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
 
-        /* Clickable feel */
-        animation: cardPulse 2.8s ease-in-out infinite;
+        animation: cardPulse 2.8s infinite;
       }
 
-      /* Blue top line */
       .brand-card::before {
         content: "";
         position: absolute;
@@ -228,52 +237,89 @@
         height: 4px;
         background: #0085ff;
         transform: scaleX(0.35);
-        transform-origin: left;
         transition: 0.3s;
       }
 
-      /* Moving Arrow */
-      .brand-card::after {
-        content: "➜";
-        position: absolute;
-        right: 16px;
-        bottom: 14px;
-        font-size: 22px;
-        color: #0085ff;
-        animation: arrowMove 1.5s ease-in-out infinite;
-      }
-
-      /* Hover */
       .brand-card:hover {
-        transform: translateY(-8px) scale(1.04);
+        transform: translateY(-8px);
         border-color: #0085ff;
         background: #f8fbff;
-        box-shadow: 0 18px 40px rgba(0, 133, 255, 0.2);
+        box-shadow: 0 20px 45px rgba(0, 133, 255, 0.18);
       }
 
       .brand-card:hover::before {
         transform: scaleX(1);
       }
 
-      /* Logo */
       .brand-logo {
         width: 100%;
         max-width: 170px;
         max-height: 90px;
         object-fit: contain;
-        display: block;
-        margin: auto;
-        transition: all 0.3s ease;
 
-        /* Floating logo */
-        animation: logoFloat 2.8s ease-in-out infinite;
+        animation: logoFloat 2.8s infinite;
       }
 
       .brand-card:hover .brand-logo {
-        transform: scale(1.12);
+        transform: scale(1.1);
       }
 
-      /* ===================== ANIMATIONS ===================== */
+      /* Attractive Button */
+
+      .brand-btn {
+        border: none;
+        outline: none;
+
+        background: linear-gradient(135deg, #0085ff, #005eff);
+
+        color: #fff;
+
+        font-size: 15px;
+        font-weight: 700;
+
+        padding: 11px 20px;
+
+        border-radius: 999px;
+
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        cursor: pointer;
+
+        box-shadow: 0 10px 25px rgba(0, 133, 255, 0.35);
+
+        transition: 0.3s;
+
+        animation: btnPulse 2s infinite;
+      }
+
+      .brand-btn span {
+        width: 28px;
+        height: 28px;
+
+        border-radius: 50%;
+
+        background: #fff;
+
+        color: #0085ff;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-size: 16px;
+        font-weight: bold;
+
+        animation: arrowMove 1.2s infinite;
+      }
+
+      .brand-card:hover .brand-btn {
+        transform: scale(1.06);
+        box-shadow: 0 15px 35px rgba(0, 133, 255, 0.45);
+      }
+
+      /* Animations */
 
       @keyframes logoFloat {
         0%,
@@ -291,7 +337,17 @@
           box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
         }
         50% {
-          box-shadow: 0 14px 34px rgba(0, 133, 255, 0.16);
+          box-shadow: 0 15px 35px rgba(0, 133, 255, 0.15);
+        }
+      }
+
+      @keyframes btnPulse {
+        0%,
+        100% {
+          box-shadow: 0 10px 25px rgba(0, 133, 255, 0.35);
+        }
+        50% {
+          box-shadow: 0 15px 35px rgba(0, 133, 255, 0.55);
         }
       }
 
@@ -301,7 +357,7 @@
           transform: translateX(0);
         }
         50% {
-          transform: translateX(5px);
+          transform: translateX(4px);
         }
       }
 
@@ -637,41 +693,65 @@
       } */
 
       /* ─── STICKY LEFT CONTACT STYLING (WITH ICON SHAKE ANIMATION) ───────────── */
+      /* ================= STICKY EXPERT CALL ================= */
+
       .sticky-left-contact {
         position: fixed;
         left: 0;
-        top: 58%;
+        top: 75%;
         transform: translateY(-50%);
-        background: linear-gradient(135deg, #0085ff, #0066d6);
+
+        background: linear-gradient(135deg, #0085ff, #0056d6);
         color: #fff;
         text-decoration: none;
+
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 12px 20px 12px 14px;
-        border-radius: 0 14px 14px 0;
-        box-shadow: 0 8px 25px rgba(0, 133, 255, 0.45);
+        gap: 20px;
+
+        width: 400px; /* Blue box ki width */
+        min-height: 120px; /* Blue box ki height */
+
+        padding: 22px 28px;
+
+        border-radius: 0 24px 24px 0;
+
+        box-shadow: 0 18px 45px rgba(0, 133, 255, 0.45);
+
         z-index: 99999;
-        transition: all 0.3s ease;
+
+        transition: all 0.35s ease;
+
+        animation: callPulse 2s infinite;
       }
 
       .sticky-left-contact:hover {
-        padding-right: 28px;
-        transform: translateY(-50%) scale(1.05);
-        box-shadow: 0 12px 35px rgba(0, 133, 255, 0.55);
+        transform: translateY(-50%) translateX(12px) scale(1.05);
+        box-shadow: 0 25px 60px rgba(0, 133, 255, 0.65);
       }
 
       .call-icon {
-        width: 48px;
-        height: 48px;
+        width: 68px;
+        height: 68px;
+
         background: #fff;
         color: #0085ff;
+
         border-radius: 50%;
+
         display: flex;
         justify-content: center;
         align-items: center;
-        animation: pulse-ring 1.8s infinite;
+
         flex-shrink: 0;
+
+        animation: pulseRing 2s infinite;
+      }
+
+      .call-icon i {
+        width: 34px !important;
+        height: 34px !important;
+        animation: phoneShake 2s infinite;
       }
 
       .call-content {
@@ -680,51 +760,72 @@
       }
 
       .call-text {
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        opacity: 0.9;
+        font-size: 15px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        line-height: 1.2;
       }
 
       .call-number {
-        font-size: 18px;
-        font-weight: 800;
+        font-size: 24px;
+        font-weight: 900;
+        line-height: 1.2;
       }
 
-      @keyframes pulse-ring {
+      /* ===== Pulse Glow ===== */
+
+      @keyframes callPulse {
+        0%,
+        100% {
+          box-shadow: 0 18px 45px rgba(0, 133, 255, 0.45);
+        }
+
+        50% {
+          box-shadow: 0 25px 60px rgba(0, 133, 255, 0.7);
+        }
+      }
+
+      /* ===== White Ring ===== */
+
+      @keyframes pulseRing {
         0% {
-          box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+          box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.8);
         }
+
         70% {
-          box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+          box-shadow: 0 0 0 18px rgba(255, 255, 255, 0);
         }
+
         100% {
           box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
         }
       }
 
-      /* Phone Shake */
-      .call-icon i {
-        animation: phone-shake 2s infinite;
-      }
+      /* ===== Phone Shake ===== */
 
-      @keyframes phone-shake {
+      @keyframes phoneShake {
         0%,
         100% {
           transform: rotate(0deg);
         }
+
         10% {
           transform: rotate(-18deg);
         }
+
         20% {
           transform: rotate(18deg);
         }
+
         30% {
           transform: rotate(-18deg);
         }
+
         40% {
           transform: rotate(18deg);
         }
+
         50% {
           transform: rotate(0deg);
         }
@@ -736,11 +837,11 @@
   <body>
     <a href="tel:6123149536" class="sticky-left-contact font-sans">
       <div class="call-icon">
-        <i data-lucide="phone-call" style="width: 24px; height: 24px"></i>
+        <i data-lucide="headset"></i>
       </div>
 
       <div class="call-content">
-        <span class="call-text">CALL NOW</span>
+        <span class="call-text">FREE EXPERT SUPPORT</span>
         <span class="call-number">612-314-9536</span>
       </div>
     </a>
@@ -756,18 +857,22 @@
         <div class="brand-grid">
           <div class="brand-card" onclick="navigateToBrand('h')">
             <img src="/images/h-logo.png" alt="HP" class="brand-logo" />
+            <button class="brand-btn">Setup Now <span>➜</span></button>
           </div>
 
           <div class="brand-card" onclick="navigateToBrand('br')">
             <img src="/images/b-logo.png" alt="Brother" class="brand-logo" />
+            <button class="brand-btn">Setup Now <span>➜</span></button>
           </div>
 
           <div class="brand-card" onclick="navigateToBrand('ep')">
             <img src="/images/E-Logo.png" alt="Epson" class="brand-logo" />
+            <button class="brand-btn">Setup Now <span>➜</span></button>
           </div>
 
           <div class="brand-card" onclick="navigateToBrand('ca')">
             <img src="/images/C-Logo.png" alt="Canon" class="brand-logo" />
+            <button class="brand-btn">Setup Now <span>➜</span></button>
           </div>
         </div>
       </div>
