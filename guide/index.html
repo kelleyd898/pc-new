@@ -185,16 +185,16 @@
       }
 
       /* ─── BRAND GRID (STRICT HORIZONTAL ROW - NO WRAPPING) ──────────────────── */
+      /* ===================== BRAND SECTION ===================== */
+
       .brand-section {
-        padding: 1rem 1.5rem 3rem 1.5rem;
-        background-color: #ffffff;
+        padding: 1.5rem 1.5rem 3rem;
+        background: #fff;
       }
 
       .brand-grid {
         display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        gap: 1.25rem;
+        gap: 1.5rem;
         width: 100%;
       }
 
@@ -203,25 +203,106 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: #ffffff;
-        border: 1px solid #d1d5db;
-        border-radius: 0.75rem;
-        min-height: 120px;
-        padding: 1rem;
+        background: #fff;
+        border: 2px solid #dbe3ec;
+        border-radius: 18px;
+        min-height: 170px;
+        padding: 2rem;
         cursor: pointer;
-        transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+
+        /* Clickable feel */
+        animation: cardPulse 2.8s ease-in-out infinite;
       }
 
+      /* Blue top line */
+      .brand-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #0085ff;
+        transform: scaleX(0.35);
+        transform-origin: left;
+        transition: 0.3s;
+      }
+
+      /* Moving Arrow */
+      .brand-card::after {
+        content: "➜";
+        position: absolute;
+        right: 16px;
+        bottom: 14px;
+        font-size: 22px;
+        color: #0085ff;
+        animation: arrowMove 1.5s ease-in-out infinite;
+      }
+
+      /* Hover */
       .brand-card:hover {
-        border-color: #9ca3af;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-        transform: translateY(-2px);
+        transform: translateY(-8px) scale(1.04);
+        border-color: #0085ff;
+        background: #f8fbff;
+        box-shadow: 0 18px 40px rgba(0, 133, 255, 0.2);
       }
 
-      .brand-placeholder-text {
-        font-size: 1.25rem;
-        font-weight: 800;
-        color: #9ca3af;
+      .brand-card:hover::before {
+        transform: scaleX(1);
+      }
+
+      /* Logo */
+      .brand-logo {
+        width: 100%;
+        max-width: 170px;
+        max-height: 90px;
+        object-fit: contain;
+        display: block;
+        margin: auto;
+        transition: all 0.3s ease;
+
+        /* Floating logo */
+        animation: logoFloat 2.8s ease-in-out infinite;
+      }
+
+      .brand-card:hover .brand-logo {
+        transform: scale(1.12);
+      }
+
+      /* ===================== ANIMATIONS ===================== */
+
+      @keyframes logoFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+
+      @keyframes cardPulse {
+        0%,
+        100% {
+          box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+        }
+        50% {
+          box-shadow: 0 14px 34px rgba(0, 133, 255, 0.16);
+        }
+      }
+
+      @keyframes arrowMove {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(5px);
+        }
       }
 
       /* ─── GENTLE ASSISTANCE GREY BANNER (COMPLIANT ALIGNMENT) ───────────────── */
@@ -546,14 +627,14 @@
         font-weight: 500;
       }
 
-      .brand-logo {
+      /* .brand-logo {
         max-width: 100%;
         max-height: 55px;
         width: auto;
         height: auto;
         object-fit: contain;
         display: block;
-      }
+      } */
 
       /* ─── STICKY LEFT CONTACT STYLING (WITH ICON SHAKE ANIMATION) ───────────── */
       .sticky-left-contact {
@@ -667,21 +748,6 @@
     <div class="section-hero-title">
       <div class="max-w-5xl">
         <h1 class="main-title font-sans">Select Your Printer Model</h1>
-
-        <div class="hero-checkpoints-container font-sans">
-          <div class="checkpoint-item">
-            <i data-lucide="check" class="checkpoint-icon"></i>
-            Complete Printer Setup Help
-          </div>
-          <div class="checkpoint-item">
-            <i data-lucide="check" class="checkpoint-icon"></i>
-            Resolve Printer Offline Status
-          </div>
-          <div class="checkpoint-item">
-            <i data-lucide="check" class="checkpoint-icon"></i>
-            Fix Printer Not Responding Errors
-          </div>
-        </div>
       </div>
     </div>
 
@@ -706,6 +772,23 @@
         </div>
       </div>
     </div>
+
+    <!-- <div class="section-hero-title">
+      <div class="hero-checkpoints-container font-sans">
+        <div class="checkpoint-item">
+          <i data-lucide="check" class="checkpoint-icon"></i>
+          Complete Printer Setup Help
+        </div>
+        <div class="checkpoint-item">
+          <i data-lucide="check" class="checkpoint-icon"></i>
+          Resolve Printer Offline Status
+        </div>
+        <div class="checkpoint-item">
+          <i data-lucide="check" class="checkpoint-icon"></i>
+          Fix Printer Not Responding Errors
+        </div>
+      </div>
+    </div> -->
 
     <div class="grey-accent-block">
       <div class="max-w-5xl">
