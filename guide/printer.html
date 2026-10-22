@@ -337,6 +337,33 @@
       0%, 100% { opacity: 1; }
       50% { opacity: .5; }
     }
+
+    .pill-chat-now-btn {
+        background: linear-gradient(135deg, #0085ff, #0066d6);
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 0.75rem 1.75rem;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 8px 20px rgba(0, 133, 255, 0.35);
+        animation: chatBounce 2.2s infinite;
+        transition: 0.3s;
+      }
+
+      .pill-chat-now-btn:hover { transform: scale(1.05); }
+
+      @keyframes chatBounce {
+        0%, 100% { transform: translateY(0); }
+        8% { transform: translateY(-8px); }
+        16% { transform: translateY(4px); }
+        24% { transform: translateY(-2px); }
+        32% { transform: translateY(2px); }
+      }
   </style>
 
 <script src="//code.jivosite.com/widget/qOWuvYdGFT" async></script>
@@ -527,7 +554,14 @@
                 <p id="error-code-display" class="err-code-txt font-mono"></p>
               </div>
             </div>
-            <img src="/images/S3.png" class="err-s2-img">
+            <button
+            type="button"
+            class="pill-chat-now-btn font-sans"
+            onclick="triggerLiveChatFallback()"
+          >
+            <i data-lucide="message-circle-more" style="width: 18px; height: 18px"></i>
+            Chat Now
+          </button>
           </div>
         </div>
 
@@ -654,6 +688,12 @@
     if (executionTimeoutTimer) clearTimeout(executionTimeoutTimer);
     document.getElementById('setupModal').style.display = 'none';
     document.getElementById('mainModelInput').value = '';
+
+    function triggerLiveChatFallback() {
+        if (window.LiveChatWidget) {
+          window.LiveChatWidget.call('maximize');
+        }
+      }
     
     const nameInput = document.getElementById('userNameInput');
     const modelInput = document.getElementById('userModelInput');
@@ -784,6 +824,7 @@
     } 
   });
 </script>
+  
 
   <!-- Start of LiveChat (www.livechat.com) code -->
 <!-- <script>
